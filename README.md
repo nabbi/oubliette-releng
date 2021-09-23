@@ -46,6 +46,12 @@ cd /var/tmp/catalyst/builds/hardened
 wget http://distfiles.gentoo.org/releases/amd64/autobuilds/current-stage3-amd64-hardened-openrc/stage3-amd64-hardened-openrc-20210912T170541Z.tar.xz
 ln -s stage3-amd64-hardened-openrc-20210912T170541Z.tar.xz gentoo-stage3-amd64-hardened-openrc-latest.tar.xz
 ```
+
+## add overlay
+```
+layman -a oubliette
+```
+
 ## clone portage git repo
 ```
 mkdir -p /var/tmp/catalyst/repos/
@@ -56,11 +62,16 @@ git clone https://anongit.gentoo.org/git/repo/gentoo.git /var/tmp/catalyst/repos
 # run catalyst build phases
 
 
-## update snapshot
+## update portage and overlays
 ```
 cd /var/tmp/catalyst/repos/gentoo.git
 git pull
 ```
+
+```
+layman -S
+```
+
 ## create snapshot
 ```
 cd /opt/oubliette-releng
@@ -77,4 +88,8 @@ catalyst -f releases/specs/amd64/hardened/stage3-openrc.spec -c config/catalyst.
 ```
 catalyst -f releases/specs/amd64/hardened/admincd-stage1.spec -c config/catalyst.conf
 catalyst -f releases/specs/amd64/hardened/admincd-stage2.spec -c config/catalyst.conf
+```
+## server
+```
+catalyst -f releases/specs/amd64/hardened/stage4-openrc.spec -c config/catalyst.conf
 ```
