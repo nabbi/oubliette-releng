@@ -3,7 +3,7 @@ target: stage4
 version_stamp: hardened-oubliette-server
 rel_type: hardened
 profile: default/linux/amd64/17.1/hardened
-compression_mode: pixz_x
+compression_mode: pixz
 source_subpath: hardened/stage3-amd64-hardened-openrc-oubliette
 portage_confdir: /opt/oubliette-releng/releases/portage/isos
 snapshot_treeish: master
