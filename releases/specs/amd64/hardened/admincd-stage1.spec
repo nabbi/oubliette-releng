@@ -4,7 +4,7 @@ target: livecd-stage1
 rel_type: hardened
 profile: default/linux/amd64/17.1/hardened
 source_subpath: hardened/stage3-amd64-hardened-openrc-oubliette
-compression_mode: pixz_x
+compression_mode: pixz
 portage_confdir: /opt/oubliette-releng/releases/portage/isos
 
 livecd/use:
@@ -173,6 +173,7 @@ livecd/packages:
 	sys-boot/grub
 	sys-firmware/ipw2100-firmware
 	sys-firmware/ipw2200-firmware
+	sys-fs/bcache-tools
 	sys-fs/btrfs-progs
 	sys-fs/cryptsetup
 	sys-fs/ddrescue
@@ -181,7 +182,6 @@ livecd/packages:
 	sys-fs/dosfstools
 	sys-fs/e2fsprogs
 	sys-fs/exfat-utils
-	sys-fs/ext3grep
 	sys-fs/extundelete
 	sys-fs/f2fs-tools
 	sys-fs/jfsutils

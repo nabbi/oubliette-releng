@@ -15,10 +15,9 @@ livecd/volid: Gentoo amd64 AdminCD oubliette
 boot/kernel: gentoo
 
 boot/kernel/gentoo/sources: gentoo-sources
-boot/kernel/gentoo/config: /opt/oubliette-releng/releases/kconfig/amd64/amd64-5.10.27.config
+boot/kernel/gentoo/config: /opt/oubliette-releng/releases/kconfig/amd64/amd64-5.10.61.config
 
-boot/kernel/gentoo/packages:
-	sys-fs/zfs
+boot/kernel/gentoo/packages: --usepkg n zfs zfs-kmod
 
 livecd/unmerge:
 	app-admin/eselect
