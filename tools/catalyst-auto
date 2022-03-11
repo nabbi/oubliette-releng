@@ -386,7 +386,7 @@ run_catalyst_commands() {
 	build_failure=0
 
 	timeprefix=()
-	which time >/dev/null && timeprefix=( "time" )
+	command -v time >/dev/null && timeprefix=( "time" )
 
 	JOB_PIDS=()
 	JOB_RETS=()
