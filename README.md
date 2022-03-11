@@ -27,7 +27,7 @@ These spec and conf files are incompatible with previous stable catalyst-3.0.17 
 
 # initial setup
 
-I haven't quite deciphered how release team translates @vars@ in spec files, I pathed these under /opt/ for my own convenience
+I placed under /opt/ for my own convenience
 ```
 git clone https://github.com/nabbi/oubliette-releng /opt/oubliette-releng
 cd /opt/oubliette-releng
@@ -60,7 +60,11 @@ git clone https://anongit.gentoo.org/git/repo/gentoo.git /var/tmp/catalyst/repos
 
 
 # run catalyst build phases
+WIP: as I migrate to catalyst-auto for rewriting @VAR@ in the spec files, these steps might be out of order and include the manual non-auto process. YMMV
 
+```
+./tools/catalyst-auto -X -v -c config/catalyst.conf
+```
 
 ## update portage and overlays
 ```
@@ -88,8 +92,4 @@ catalyst -f releases/specs/amd64/hardened/stage3-openrc.spec -c config/catalyst.
 ```
 catalyst -f releases/specs/amd64/hardened/admincd-stage1.spec -c config/catalyst.conf
 catalyst -f releases/specs/amd64/hardened/admincd-stage2.spec -c config/catalyst.conf
-```
-## server
-```
-catalyst -f releases/specs/amd64/hardened/stage4-openrc.spec -c config/catalyst.conf
 ```

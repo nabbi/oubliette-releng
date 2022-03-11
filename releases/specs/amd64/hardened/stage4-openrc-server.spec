@@ -1,12 +1,12 @@
 subarch: amd64
 target: stage4
-version_stamp: hardened-oubliette-server
+version_stamp: hardened-oubliette-server-@TIMESTAMP@
 rel_type: hardened
 profile: default/linux/amd64/17.1/hardened
 compression_mode: pixz
-source_subpath: hardened/stage3-amd64-hardened-openrc-oubliette
-portage_confdir: /opt/oubliette-releng/releases/portage/isos
-snapshot_treeish: master
+snapshot: @TIMESTAMP@
+source_subpath: hardened/stage3-amd64-oubliette-hardened-openrc-@TIMESTAMP@
+portage_confdir: @REPO_DIR@/releases/portage/isos
 repos: /var/lib/layman/oubliette
 
 stage4/use:
@@ -40,7 +40,7 @@ stage4/packages:
     dev-util/strace
     net-analyzer/tcpdump
 
-stage4/fsscript: /opt/oubliette-releng/releases/scripts/cloud-prep.sh
+stage4/fsscript: @REPO_DIR@/releases/scripts/cloud-prep.sh
 stage4/rcadd:
 	acpid|default
 	net.lo|default
@@ -49,7 +49,7 @@ stage4/rcadd:
 
 boot/kernel: gentoo
 boot/kernel/gentoo/sources: gentoo-sources
-boot/kernel/gentoo/config: /opt/oubliette-releng/releases/kconfig/amd64/cloud-amd64-hardened.config
+boot/kernel/gentoo/config: @REPO_DIR@/releases/kconfig/amd64/cloud-amd64-hardened.config
 boot/kernel/gentoo/extraversion: openstack
 boot/kernel/gentoo/gk_kernargs: --all-ramdisk-modules
 

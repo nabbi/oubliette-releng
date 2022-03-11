@@ -1,9 +1,10 @@
 subarch: amd64
-version_stamp: oubliette
+version_stamp: oubliette-@TIMESTAMP@
 target: livecd-stage1
 rel_type: hardened
 profile: default/linux/amd64/17.1/hardened
-source_subpath: hardened/stage3-amd64-hardened-openrc-oubliette
+snapshot: @TIMESTAMP@
+source_subpath: hardened/stage3-amd64-oubliette-hardened-openrc-@TIMESTAMP@
 compression_mode: pixz
 portage_confdir: /opt/oubliette-releng/releases/portage/isos
 
@@ -222,7 +223,5 @@ livecd/packages:
 	dev-tcltk/expect
 	# coffee break
 	games-roguelike/evilhack
-
-snapshot_treeish: master
 
 repos: /var/lib/layman/oubliette

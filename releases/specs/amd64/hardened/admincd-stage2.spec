@@ -1,21 +1,22 @@
 subarch: amd64
-version_stamp: oubliette
+version_stamp: oubliette-@TIMESTAMP@
 target: livecd-stage2
 rel_type: hardened
 profile: default/linux/amd64/17.1/hardened
-source_subpath: hardened/livecd-stage1-amd64-oubliette
-portage_confdir: /opt/oubliette-releng/releases/portage/isos
+snapshot: @TIMESTAMP@
+source_subpath: hardened/livecd-stage1-amd64-oubliette-@TIMESTAMP@
+portage_confdir: @REPO_DIR@/releases/portage/isos
 
 livecd/bootargs: dokeymap iommu=soft
 livecd/fstype: squashfs
-livecd/iso: admincd-amd64-oubliette.iso
+livecd/iso: admincd-amd64-oubliette-@TIMESTAMP@.iso
 livecd/type: gentoo-release-minimal
-livecd/volid: Gentoo amd64 AdminCD oubliette
+livecd/volid: Gentoo amd64 AdminCD oubliette @TIMESTAMP@
 
 boot/kernel: gentoo
 
 boot/kernel/gentoo/sources: gentoo-sources
-boot/kernel/gentoo/config: /opt/oubliette-releng/releases/kconfig/amd64/amd64-5.10.61.config
+boot/kernel/gentoo/config: @REPO_DIR@/releases/kconfig/amd64/amd64-5.10.61.config
 
 boot/kernel/gentoo/packages: --usepkg n zfs zfs-kmod
 
