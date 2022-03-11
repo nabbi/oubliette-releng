@@ -53,7 +53,13 @@ EOH
 }
 
 send_email() {
+	if [[ ${verbose} -ge 1 ]]; then
+        echo "$1 $2"
+	fi
+
 	[[ ${nonetwork} == 0 ]] || return
+
+	[[ ! -z ${EMAIL_TO} ]] || return
 
 	local subject="${EMAIL_SUBJECT_PREPEND} $1"
 	local message=$2
@@ -66,9 +72,9 @@ send_email() {
 		body=${message}
 	fi
 
-	#printf 'From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n%b' \
-	#	"${EMAIL_FROM}" "${EMAIL_TO}" "${subject}" "${body}" | \
-	#	/usr/sbin/sendmail -f "${EMAIL_FROM}" ${EMAIL_TO//,/ }
+	printf 'From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n%b' \
+		"${EMAIL_FROM}" "${EMAIL_TO}" "${subject}" "${body}" | \
+		/usr/sbin/sendmail -f "${EMAIL_FROM}" ${EMAIL_TO//,/ }
 }
 
 # Usage: run_cmd <logfile> <command to run>
@@ -114,7 +120,12 @@ post_build() {
 catalyst_var() {
 	# Extract a setting from the catalyst.conf.
 	local var=$1
-	(. "${CATALYST_CONFIG}"; echo "${!var}")
+	local val=$(grep --color=never -Po "^${var}\s*=\s*\K.*" "${CATALYST_CONFIG}" || true)
+
+	if [[ ! -z ${val} ]]; then
+		declare ${var}="${val}"
+		echo "${var}"
+	fi
 }
 
 trigger_post_build() {
