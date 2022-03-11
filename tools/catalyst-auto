@@ -54,7 +54,7 @@ EOH
 
 send_email() {
 	if [[ ${verbose} -ge 1 ]]; then
-        echo "$1 $2"
+        echo "$1 $2 build log at $3"
 	fi
 
 	[[ ${nonetwork} == 0 ]] || return
