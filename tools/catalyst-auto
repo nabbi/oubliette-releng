@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2022 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 CATALYST_CONFIG=/etc/catalyst/catalyst.conf
@@ -119,11 +119,9 @@ post_build() {
 
 catalyst_var() {
 	# Extract a setting from the catalyst.conf.
-	local var=$1
-	local val=$(grep --color=never -Po "^${var}\s*=\s*\K.*" "${CATALYST_CONFIG}" || true)
+	local var=$(grep --color=never -Po "^${1}\s*=\s*\K.*" "${CATALYST_CONFIG}" || true)
 
-	if [[ ! -z ${val} ]]; then
-		declare ${var}="${val}"
+	if [[ ! -z ${var} ]]; then
 		echo "${var}"
 	fi
 }
