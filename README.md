@@ -58,44 +58,10 @@ ln -s stage3-amd64-hardened-openrc-20210912T170541Z.tar.xz gentoo-stage3-amd64-h
 layman -a oubliette
 ```
 
-## clone portage git repo
-```
-mkdir -p /var/tmp/catalyst/repos/
-git clone https://anongit.gentoo.org/git/repo/gentoo.git /var/tmp/catalyst/repos/gentoo.git
-```
 
-
-# run catalyst build phases
-WIP: as I migrate to catalyst-auto for rewriting @VAR@ in the spec files, these steps might be out of order and include the manual non-auto process. YMMV
-
-```
-./tools/catalyst-auto -X -v -c config/catalyst.conf
-```
-
-## update portage and overlays
-```
-cd /var/tmp/catalyst/repos/gentoo.git
-git pull
-```
+# run catalyst-auto
 
 ```
 layman -S
-```
-
-## create snapshot
-```
-cd /opt/oubliette-releng
-catalyst -s master -c config/catalyst.conf
-```
-## stages
-```
-cd /opt/oubliette-releng
-catalyst -f releases/specs/amd64/hardened/stage1-openrc.spec -c config/catalyst.conf
-catalyst -f releases/specs/amd64/hardened/stage2-openrc.spec -c config/catalyst.conf
-catalyst -f releases/specs/amd64/hardened/stage3-openrc.spec -c config/catalyst.conf
-```
-## admincd
-```
-catalyst -f releases/specs/amd64/hardened/admincd-stage1.spec -c config/catalyst.conf
-catalyst -f releases/specs/amd64/hardened/admincd-stage2.spec -c config/catalyst.conf
+./tools/catalyst-auto -X -v -c config/catalyst.conf
 ```

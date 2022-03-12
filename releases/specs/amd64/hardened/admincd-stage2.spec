@@ -248,5 +248,4 @@ livecd/rcadd:
 
 livecd/root_overlay: /opt/oubliette-releng/overlay/admincd/
 
-snapshot_treeish: master
 repos: /var/lib/layman/oubliette
