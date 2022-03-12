@@ -379,9 +379,11 @@ run_catalyst_commands() {
 	fi
 
 	build_failure=0
-
-	timeprefix=()
-	which time >/dev/null && timeprefix=( "time" )
+	if ! which time >/dev/null ; then
+		echo "Please emerge sys-process/time"
+	else
+		timeprefix=( "time" )
+	fi
 
 	JOB_PIDS=()
 	JOB_RETS=()

@@ -33,6 +33,12 @@ git clone https://github.com/nabbi/oubliette-releng /opt/oubliette-releng
 cd /opt/oubliette-releng
 git submodule update --init --recursive 
 ```
+## time
+catalyst-auto depends on time for statistical process reporting, but it cannot call the bash built in time command
+```
+emerge -qva sys-process/time
+```
+
 ## distcc config
 
 ./config/catalyst.conf needs to be defined from catalyst.example.conf, adjust distcc servers as needed
