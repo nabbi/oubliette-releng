@@ -379,8 +379,10 @@ run_catalyst_commands() {
 	fi
 
 	build_failure=0
+
+    # check if time pkg installed, the built in bash time function is not used
 	if ! which time >/dev/null ; then
-		echo "Please emerge sys-process/time"
+		echo "Please emerge sys-process/time for process resource utilizaion"
 	else
 		timeprefix=( "time" )
 	fi
