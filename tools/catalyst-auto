@@ -54,7 +54,7 @@ EOH
 
 send_email() {
 	if [[ ${verbose} -ge 1 ]]; then
-        echo "$1 $2 build log at $3"
+		echo "$1 $2 build log at $3"
 	fi
 
 	[[ ${nonetwork} == 0 ]] || return
@@ -120,10 +120,7 @@ post_build() {
 catalyst_var() {
 	# Extract a setting from the catalyst.conf.
 	local var=$(grep --color=never -Po "^${1}\s*=\s*\K.*" "${CATALYST_CONFIG}" || true)
-
-	if [[ ! -z ${var} ]]; then
-		echo "${var}"
-	fi
+	[[ -z ${var} ]] || echo "${var}"
 }
 
 trigger_post_build() {
@@ -384,7 +381,7 @@ run_catalyst_commands() {
 	build_failure=0
 
 	timeprefix=()
-	command -v time >/dev/null && timeprefix=( "time" )
+	which time >/dev/null && timeprefix=( "time" )
 
 	JOB_PIDS=()
 	JOB_RETS=()
