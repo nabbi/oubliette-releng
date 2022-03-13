@@ -282,14 +282,9 @@ run_catalyst_commands() {
 	if [[ ${preclean} == 1 ]]; then
 		rm -rf "${TMP_PATH:-/tmp}/catalyst-auto".*
 
-		snapshot_cache=$(catalyst_var snapshot_cache)
-		if [[ -z ${snapshot_cache} ]]; then
-			echo "error: snapshot_cache not set in config file"
-			exit 1
-		fi
 		pushd "${BUILD_SRCDIR_BASE}" >/dev/null || exit 1
 		rm -rf --one-file-system \
-			kerncache packages snapshots tmp "${snapshot_cache}"/*
+			kerncache packages snapshots tmp
 		popd >/dev/null
 	fi
 
@@ -380,9 +375,10 @@ run_catalyst_commands() {
 
 	build_failure=0
 
-    # check if time pkg installed, the built in bash time function is not used
+	# bash built-in time function is not used
 	if ! which time >/dev/null ; then
-		echo "Please emerge sys-process/time for process resource utilizaion"
+		timeprefix=()
+		echo "sys-process/time is optional for build resource utilization"
 	else
 		timeprefix=( "time" )
 	fi
