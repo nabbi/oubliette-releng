@@ -67,7 +67,7 @@ send_email() {
 	local body
 
 	if [ -n "${logfile}" ]; then
-		body=$(printf '%b\n\n\n' "${message}"; tail -n 200 "${logfile}"; printf '\n\n\nFull build log at %s\n' "${logfile}")
+		body=$(printf '%b\n\n\n' "${message}"; tail -n 1000 "${logfile}"; printf '\n\n\nFull build log at %s\n' "${logfile}")
 	else
 		body=${message}
 	fi
@@ -119,8 +119,8 @@ post_build() {
 
 catalyst_var() {
 	# Extract a setting from the catalyst.conf.
-	local var=$(grep --color=never -Po "^${1}\s*=\s*\K.*" "${CATALYST_CONFIG}" || true)
-	[[ -z ${var} ]] || echo "${var}"
+	local var=$1
+	(. "${CATALYST_CONFIG}"; echo "${!var}")
 }
 
 trigger_post_build() {

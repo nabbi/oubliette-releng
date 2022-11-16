@@ -72,6 +72,7 @@ livecd/packages:
 	app-misc/pax-utils
 	app-misc/screen
 	app-misc/tmux
+	app-portage/cpuid2cpuflags
 	app-portage/eix
 	app-portage/gentoolkit
 	app-portage/mirrorselect
@@ -164,6 +165,7 @@ livecd/packages:
 	sys-apps/smartmontools
 	sys-apps/usbutils
 	sys-apps/which
+	sys-auth/ssh-import-id
 	sys-block/aoetools
 	sys-block/fio
 	sys-block/mtx
@@ -191,6 +193,7 @@ livecd/packages:
 	sys-fs/mac-fdisk
 	sys-fs/mdadm
 	sys-fs/multipath-tools
+	sys-fs/ncdu
 	sys-fs/ntfs3g
 	sys-fs/reiserfsprogs
 	sys-fs/xfsprogs
