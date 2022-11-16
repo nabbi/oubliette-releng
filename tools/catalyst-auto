@@ -256,7 +256,7 @@ run_catalyst_commands() {
 			usage "ERROR: You must specify a valid config file to use: '$config_file' is not valid"
 			exit 1
 		fi
-		source "${config_file}"
+		source ${config_file}
 		doneconfig=1
 	done
 	if [[ ${doneconfig} == 0 ]]; then
@@ -282,9 +282,14 @@ run_catalyst_commands() {
 	if [[ ${preclean} == 1 ]]; then
 		rm -rf "${TMP_PATH:-/tmp}/catalyst-auto".*
 
+		snapshot_cache=$(catalyst_var snapshot_cache)
+		if [[ -z ${snapshot_cache} ]]; then
+			echo "error: snapshot_cache not set in config file"
+			exit 1
+		fi
 		pushd "${BUILD_SRCDIR_BASE}" >/dev/null || exit 1
 		rm -rf --one-file-system \
-			kerncache packages snapshots tmp
+			kerncache packages snapshots tmp "${snapshot_cache}"/*
 		popd >/dev/null
 	fi
 

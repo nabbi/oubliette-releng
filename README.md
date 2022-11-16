@@ -43,6 +43,8 @@ emerge -qva sys-process/time
 
 ./config/catalyst.conf needs to be defined from catalyst.example.conf, adjust distcc servers as needed
 
+Copy this file into /etc/catalyst/catalyst.conf
+
 ## download stage3 seed
 
 * http://distfiles.gentoo.org/releases/amd64/autobuilds/current-stage3-amd64-hardened-openrc/
@@ -63,5 +65,5 @@ layman -a oubliette
 
 ```
 layman -S
-./tools/catalyst-auto -X -v -c config/catalyst.conf
+./tools/catalyst-auto -X -v -c tools/catalyst-auto-amd64.conf
 ```
