@@ -10,4 +10,4 @@ update_seed: yes
 update_seed_command: --update --deep --newuse @world
 portage_confdir: @REPO_DIR@/releases/portage/stages
 portage_prefix: releng
-repos: /var/lib/layman/oubliette
+repos: /var/db/repos/oubliette

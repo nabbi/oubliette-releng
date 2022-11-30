@@ -7,7 +7,7 @@ compression_mode: pixz
 snapshot: @TIMESTAMP@
 source_subpath: hardened/stage3-amd64-oubliette-hardened-openrc-@TIMESTAMP@
 portage_confdir: @REPO_DIR@/releases/portage/isos
-repos: /var/lib/layman/oubliette
+repos: /var/db/repos/oubliette
 
 stage4/use:
 	bindist

@@ -227,4 +227,4 @@ livecd/packages:
 	# coffee break
 	games-roguelike/evilhack
 
-repos: /var/lib/layman/oubliette
+repos: /var/db/repos/oubliette

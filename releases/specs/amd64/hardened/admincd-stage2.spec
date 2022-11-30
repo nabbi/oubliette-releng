@@ -248,4 +248,4 @@ livecd/rcadd:
 
 livecd/root_overlay: /opt/oubliette-releng/overlay/admincd/
 
-repos: /var/lib/layman/oubliette
+repos: /var/db/repos/oubliette

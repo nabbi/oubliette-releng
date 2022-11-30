@@ -9,7 +9,7 @@ These are my unofficial Catalyst build specs, modified from [Gentoo's Releng](ht
 * livecd: auto-start sshd using my public key for auth
 * livecd: includes more packages - mostly network focused
 * distcc support
-* incroporates Oubliette [overlay](https://github.com/nabbi/oubliette-overlay) and [patches](https://github.com/nabbi/oubliette-patches)
+* incorporates Oubliette [overlay](https://github.com/nabbi/oubliette-overlay) and [patches](https://github.com/nabbi/oubliette-patches)
 
 ## AMD64 Server Stage4
 
@@ -52,12 +52,12 @@ Copy this file into /etc/catalyst/catalyst.conf
 mkdir -p /var/tmp/catalyst/builds/hardened
 cd /var/tmp/catalyst/builds/hardened
 wget http://distfiles.gentoo.org/releases/amd64/autobuilds/current-stage3-amd64-hardened-openrc/stage3-amd64-hardened-openrc-20210912T170541Z.tar.xz
-ln -s stage3-amd64-hardened-openrc-20210912T170541Z.tar.xz gentoo-stage3-amd64-hardened-openrc-latest.tar.xz
 ```
 
-## add overlay
+## add oubliette overlay
+The spec files expect default paths at /var/db/repos/oubliette
 ```
-layman -a oubliette
+eselect repository enable oubliette
 ```
 
 
