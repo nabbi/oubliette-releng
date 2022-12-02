@@ -64,6 +64,5 @@ eselect repository enable oubliette
 # run catalyst-auto
 
 ```
-layman -S
 ./tools/catalyst-auto -X -v -c tools/catalyst-auto-amd64.conf
 ```
