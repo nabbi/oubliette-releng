@@ -14,20 +14,12 @@ livecd/use:
 	compile-locales
 	fbcon
 	filecaps
-	ipv6
 	livecd
-	modules
-	ncurses
-	nls
-	nptl
-	pam
 	portaudio
-	readline
 	socks5
-	ssl
 	unicode
 	xml
-	tcl
+	#tcl
 
 livecd/packages:
 	app-accessibility/brltty
@@ -125,6 +117,7 @@ livecd/packages:
 	net-wireless/iw
 	net-wireless/wireless-tools
 	net-wireless/wpa_supplicant
+	sys-apps/arch-chroot
 	sys-apps/arrayprobe
 	sys-apps/acl
 	sys-apps/attr
@@ -152,6 +145,7 @@ livecd/packages:
 	sys-apps/man-pages
 	sys-apps/man-pages-posix
 	sys-apps/memtester
+	sys-apps/memtest86+
 	sys-apps/mlocate
 	sys-apps/netplug
 	sys-apps/nvme-cli
@@ -173,6 +167,7 @@ livecd/packages:
 	sys-block/parted
 	sys-block/partimage
 	sys-block/tw_cli
+	sys-boot/efibootmgr
 	sys-boot/grub
 	sys-firmware/ipw2100-firmware
 	sys-firmware/ipw2200-firmware
@@ -187,6 +182,7 @@ livecd/packages:
 	sys-fs/exfat-utils
 	sys-fs/extundelete
 	sys-fs/f2fs-tools
+	sys-fs/genfstab
 	sys-fs/jfsutils
 	sys-fs/lsscsi
 	sys-fs/lvm2
@@ -219,11 +215,11 @@ livecd/packages:
 	net-misc/socat
 	net-ftp/atftp
 	# dev
-	dev-lang/tcl
-	dev-tcltk/tcllib
-	dev-tcltk/tls
-	dev-tcltk/udp
-	dev-tcltk/expect
+	#dev-lang/tcl
+	#dev-tcltk/tcllib
+	#dev-tcltk/tls
+	#dev-tcltk/udp
+	#dev-tcltk/expect
 	# coffee break
 	games-roguelike/evilhack
 

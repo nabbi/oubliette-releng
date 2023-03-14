@@ -16,7 +16,7 @@ livecd/volid: Gentoo amd64 AdminCD oubliette @TIMESTAMP@
 boot/kernel: gentoo
 
 boot/kernel/gentoo/sources: gentoo-sources
-boot/kernel/gentoo/config: @REPO_DIR@/releases/kconfig/amd64/amd64-5.15.59.config
+boot/kernel/gentoo/config: @REPO_DIR@/releases/kconfig/amd64/amd64-5.15.80.config
 
 boot/kernel/gentoo/packages: --usepkg n zfs zfs-kmod
 
@@ -39,6 +39,7 @@ livecd/unmerge:
 	sys-apps/groff
 	sys-apps/man-db
 	sys-apps/man-pages
+	sys-apps/memtest86+
 	sys-apps/miscfiles
 	sys-apps/sandbox
 	sys-apps/texinfo
@@ -62,7 +63,7 @@ livecd/unmerge:
 	sys-libs/gdbm
 	sys-kernel/genkernel
 	sys-kernel/linux-headers
-	dev-vcs/fossil
+	#dev-vcs/fossil
 
 livecd/empty:
 	/boot
@@ -200,7 +201,6 @@ livecd/rm:
 	/usr/bin/portageq
 	/usr/bin/ranlib
 	/usr/bin/readelf
-	/usr/bin/repoman
 	/usr/bin/size
 	/usr/bin/strip
 	/usr/bin/tbz2tool
