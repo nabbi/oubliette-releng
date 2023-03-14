@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 1999-2022 Gentoo Foundation
+# Copyright 1999-2023 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 CATALYST_CONFIG=/etc/catalyst/catalyst.conf
@@ -120,7 +120,8 @@ post_build() {
 catalyst_var() {
 	# Extract a setting from the catalyst.conf.
 	local var=$(grep --color=never -Po "^${1}\s*=\s*\K.*" "${CATALYST_CONFIG}" || true)
-	[[ -z ${var} ]] || echo "${var}"
+	local vas=$(echo $var|sed -e 's:^"::g' -e 's:"$::g')
+	[[ -z ${vas} ]] || echo "${vas}"
 }
 
 trigger_post_build() {
@@ -248,6 +249,53 @@ git_update() {
 	fi
 }
 
+# Stages are uploaded to <arch>@releng-incoming.gentoo.org and in order to
+# allow us to change what system this domain points to, we will retrieve the
+# SSH fingerprint from DNS. To do this securely, we need to ensure DNSSEC is
+# working.
+verify_dnssec() {
+	[[ ${nonetwork} == 0 ]] || return
+
+	which dig >/dev/null || {
+		echo "net-dns/bind-tools is needed to verify DNSSEC is working"
+		exit 1
+	}
+
+	if ! dig +noall +comments dev.gentoo.org. IN SSHFP | egrep -q '^;; flags: [ a-z]+\<ad\>'; then
+		echo "DNSSEC does not appear to be working. Bailing out"
+		exit 1
+	fi
+
+	if ! grep -q '^options\>.*\<edns0\>' /etc/resolv.conf; then
+		echo "DNSSEC is not enabled in /etc/resolv.conf"
+		exit 1
+	fi
+}
+
+upload() {
+	if [[ ${nonetwork} == 0 ]]; then
+		echo Uploading "$@"
+		local SSH_CMD=(
+			ssh
+			-i ${UPLOAD_KEY}
+			-o UserKnownHostsFile=/dev/null
+			-o VerifyHostKeyDNS=yes
+			-o StrictHostKeyChecking=no
+			-o IPQoS=cs0
+		)
+		local RSYNC_OPTS=(
+			-e "${SSH_CMD[*]}"
+			--archive
+			--omit-dir-times
+			--delay-updates
+		)
+		rsync "${RSYNC_OPTS[@]}" "$@" ${UPLOAD_USER}@releng-incoming.gentoo.org:${UPLOAD_DEST}
+	else
+		echo Would now upload "$@"
+		ls -l $@
+	fi
+}
+
 run_catalyst_commands() {
 	doneconfig=0
 	for config_file in "${config_files[@]}"; do
@@ -256,7 +304,7 @@ run_catalyst_commands() {
 			usage "ERROR: You must specify a valid config file to use: '$config_file' is not valid"
 			exit 1
 		fi
-		source ${config_file}
+		source "${config_file}"
 		doneconfig=1
 	done
 	if [[ ${doneconfig} == 0 ]]; then
@@ -282,14 +330,9 @@ run_catalyst_commands() {
 	if [[ ${preclean} == 1 ]]; then
 		rm -rf "${TMP_PATH:-/tmp}/catalyst-auto".*
 
-		snapshot_cache=$(catalyst_var snapshot_cache)
-		if [[ -z ${snapshot_cache} ]]; then
-			echo "error: snapshot_cache not set in config file"
-			exit 1
-		fi
 		pushd "${BUILD_SRCDIR_BASE}" >/dev/null || exit 1
 		rm -rf --one-file-system \
-			kerncache packages snapshots tmp "${snapshot_cache}"/*
+			kerncache packages snapshots tmp
 		popd >/dev/null
 	fi
 
@@ -503,6 +546,9 @@ main() {
 
 	# Update the release git dir if possible.
 	git_update "$@"
+
+	# Verify DNSSEC works
+	#verify_dnssec
 
 	# Try to isolate ourselves from the rest of the system.
 	containerize "$@"
