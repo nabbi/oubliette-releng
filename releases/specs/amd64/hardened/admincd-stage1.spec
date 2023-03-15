@@ -19,7 +19,7 @@ livecd/use:
 	socks5
 	unicode
 	xml
-	#tcl
+	tcl
 
 livecd/packages:
 	app-accessibility/brltty
@@ -205,6 +205,7 @@ livecd/packages:
 	www-client/links
 	# tools
 	app-forensics/cmospwd
+	app-editors/bvi
 	# networking
 	net-analyzer/fping
 	net-misc/iperf
@@ -215,11 +216,10 @@ livecd/packages:
 	net-misc/socat
 	net-ftp/atftp
 	# dev
-	#dev-lang/tcl
-	#dev-tcltk/tcllib
-	#dev-tcltk/tls
-	#dev-tcltk/udp
-	#dev-tcltk/expect
+	dev-lang/tcl
+	dev-tcltk/tcllib
+	dev-tcltk/tls
+	dev-tcltk/expect
 	# coffee break
 	games-roguelike/evilhack
 

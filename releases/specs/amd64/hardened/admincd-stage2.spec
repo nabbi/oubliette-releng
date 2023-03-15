@@ -63,7 +63,7 @@ livecd/unmerge:
 	sys-libs/gdbm
 	sys-kernel/genkernel
 	sys-kernel/linux-headers
-	#dev-vcs/fossil
+	dev-vcs/fossil
 
 livecd/empty:
 	/boot
