@@ -1,3 +1,2 @@
 # bug 901363
-=sys-libs/glibc-2.36-r7
-=sys-devel/binutils-2.39-r4
+>sys-libs/glibc-2.36
