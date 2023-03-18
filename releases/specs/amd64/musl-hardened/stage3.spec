@@ -1,0 +1,11 @@
+subarch: amd64
+target: stage3
+version_stamp: oubliette-musl-hardened-@TIMESTAMP@
+rel_type: musl-hardened
+profile: default/linux/amd64/17.0/musl/hardened
+snapshot: @TIMESTAMP@
+source_subpath: musl-hardened/stage1-amd64-oubliette-musl-hardened-@TIMESTAMP@
+portage_confdir: @REPO_DIR@/releases/portage/stages
+portage_prefix: releng
+compression_mode: pixz
+repos: /var/db/repos/oubliette
