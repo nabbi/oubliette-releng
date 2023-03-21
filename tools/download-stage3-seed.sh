@@ -2,20 +2,26 @@
 # naming upstreams inital seed stage3 as our own speeds up
 # session resume without need to tweak the spec files
 
-DIR=/var/tmp/catalyst/builds/hardened
-mkdir -p $DIR > /dev/null
+download() {
+    local arch=$1
+    local profile=$2
+    local dir=/var/tmp/catalyst/builds/$3
 
-for s in {hardened-openrc,musl-hardened}; do
+    local url="https://distfiles.gentoo.org/releases/${arch}/autobuilds"
+    local latest=$(curl -s ${url}/latest-stage3-${arch}-${profile}.txt | tail -n 1 | awk '{print $1 '})
+    local myseed=$(echo ${latest} | sed "s/${arch}-/${arch}-oubliette-/" | sed 's:^.*/::')
 
-    URL="https://distfiles.gentoo.org/releases/amd64/autobuilds/current-stage3-amd64-${s}/"
-    SEED=$(curl -s $URL | grep "stage3-amd64-${s}.*.tar.xz<" | sed 's/^.*href="//' | sed 's/">.*$//')
-    MYSEED=$(echo $SEED | sed 's/amd64-/amd64-oubliette-/')
-
-    if [[ ! -f $DIR/$MYSEED ]]; then
-        echo "Fetching new $SEED"
-        curl -s $URL/$SEED -o $DIR/$MYSEED
+    if [[ ! -f ${dir}/${myseed} ]]; then
+        echo "Fetching new ${latest} as ${myseed}"
+        mkdir -p ${dir} > /dev/null
+        curl -s ${url}/${latest} -o ${dir}/${myseed}
     else
-        echo "$SEED is alreay Gentoo's latest autobuild"
+        echo "${arch} ${profile} (autobuild ${latest}) is current"
     fi
-done
+}
 
+download amd64 hardened-openrc hardened
+download amd64 musl-hardened musl-hardened
+#download amd64 openrc default
+
+download arm64 openrc default
