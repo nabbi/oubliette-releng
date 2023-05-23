@@ -25,20 +25,24 @@ stage4/packages:
 	sys-devel/bc
 	sys-power/acpid
 	app-crypt/gentoo-keys
-	#oubliette
-    dev-lang/tcl
-    app-admin/eclean-kernel
-    app-portage/gentoolkit
-    app-portage/layman
-    app-admin/sudo
-    sys-auth/pam_yubico
-    app-editors/vim
-    app-misc/screen
-    app-admin/syslog-ng
-    app-admin/logrotate
-    sys-process/cronie
-    dev-util/strace
-    net-analyzer/tcpdump
+	## oubliette
+	dev-vcs/git
+	dev-lang/tcl
+	app-admin/eclean-kernel
+	app-portage/gentoolkit
+	app-portage/genup
+	app-admin/sudo
+	sys-auth/pam_yubico
+	app-editors/vim
+	net-misc/openntpd
+	app-misc/screen
+	app-admin/syslog-ng
+	app-admin/logrotate
+	sys-apps/ethtool
+	sys-process/cronie
+	dev-util/strace
+	net-analyzer/tcpdump
+	net-firewall/iptables
 
 stage4/fsscript: @REPO_DIR@/releases/scripts/cloud-prep.sh
 stage4/rcadd:
