@@ -85,7 +85,6 @@ livecd/packages:
 	net-analyzer/openbsd-netcat
 	net-analyzer/tcptraceroute
 	net-analyzer/traceroute
-	net-analyzer/traceroute-nanog
 	net-analyzer/tcpdump
 	net-analyzer/nmap
 	net-dialup/mingetty
@@ -99,10 +98,10 @@ livecd/packages:
 	net-ftp/ncftp
 	net-irc/irssi
 	net-misc/curl
+	net-misc/chrony
 	net-misc/dhcpcd
 	net-misc/iputils
 	net-misc/ndisc6
-	net-misc/ntp
 	net-misc/openssh
 	net-misc/rdate
 	net-misc/rsync
@@ -213,6 +212,7 @@ livecd/packages:
 	net-misc/sipcalc
 	net-analyzer/hping
 	net-analyzer/sslscan
+	net-analyzer/traceroute-nanog
 	net-misc/socat
 	net-ftp/atftp
 	# dev

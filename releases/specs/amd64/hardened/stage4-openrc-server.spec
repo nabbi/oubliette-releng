@@ -24,13 +24,12 @@ stage4/packages:
 	sys-apps/iproute2
 	sys-devel/bc
 	sys-power/acpid
-	app-crypt/gentoo-keys
 	## oubliette
+	sec-keys/openpgp-keys-gentoo-release
 	dev-vcs/git
 	dev-lang/tcl
 	app-admin/eclean-kernel
 	app-portage/gentoolkit
-	app-portage/genup
 	app-admin/sudo
 	sys-auth/pam_yubico
 	app-editors/vim
