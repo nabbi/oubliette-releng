@@ -29,6 +29,7 @@ stage4/packages:
 	dev-vcs/git
 	dev-lang/tcl
 	app-admin/eclean-kernel
+	app-eselect/eselect-repository
 	app-portage/gentoolkit
 	app-admin/sudo
 	sys-auth/pam_yubico
