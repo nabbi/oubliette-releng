@@ -5,7 +5,7 @@
 download() {
     local arch=$1
     local profile=$2
-    local dir=/var/tmp/catalyst/builds/$3
+    local dir="/var/tmp/catalyst/builds/23.0-${3}"
 
     local url="https://distfiles.gentoo.org/releases/${arch}/autobuilds"
     local latest=$(curl -s ${url}/latest-stage3-${arch}-${profile}.txt | grep "stage3-${arch}-${profile}" | awk '{print $1 '})
