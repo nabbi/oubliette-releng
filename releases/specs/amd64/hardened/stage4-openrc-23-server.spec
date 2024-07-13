@@ -40,7 +40,7 @@ stage4/packages:
 	app-admin/logrotate
 	sys-apps/ethtool
 	sys-process/cronie
-	dev-util/strace
+	dev-debug/strace
 	net-analyzer/tcpdump
 	net-firewall/iptables
 
