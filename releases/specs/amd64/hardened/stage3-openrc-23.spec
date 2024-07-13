@@ -9,3 +9,4 @@ compression_mode: pixz
 portage_confdir: @REPO_DIR@/releases/portage/stages
 portage_prefix: releng
 repos: /var/db/repos/oubliette
+binrepo_path: amd64/binpackages/23.0/x86-64_hardened
