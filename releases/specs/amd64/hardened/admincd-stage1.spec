@@ -217,7 +217,6 @@ livecd/packages:
 	net-misc/sipcalc
 	net-analyzer/hping
 	net-analyzer/sslscan
-	net-analyzer/traceroute-nanog
 	net-misc/socat
 	net-ftp/atftp
 	# dev
