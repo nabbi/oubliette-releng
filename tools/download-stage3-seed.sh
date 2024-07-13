@@ -8,7 +8,7 @@ download() {
     local dir=/var/tmp/catalyst/builds/$3
 
     local url="https://distfiles.gentoo.org/releases/${arch}/autobuilds"
-    local latest=$(curl -s ${url}/latest-stage3-${arch}-${profile}.txt | tail -n 1 | awk '{print $1 '})
+    local latest=$(curl -s ${url}/latest-stage3-${arch}-${profile}.txt | grep "stage3-${arch}-${profile}" | awk '{print $1 '})
     local myseed=$(echo ${latest} | sed "s/${arch}-/${arch}-oubliette-/" | sed 's:^.*/::')
 
     if [[ ! -f ${dir}/${myseed} ]]; then
