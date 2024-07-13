@@ -210,8 +210,6 @@ livecd/packages:
 	# tools
 	app-forensics/cmospwd
 	app-editors/bvi
-	app-crypt/tpm2-tools
-	app-crypt/tpm2-tss
 	# networking
 	net-analyzer/fping
 	net-misc/iperf
