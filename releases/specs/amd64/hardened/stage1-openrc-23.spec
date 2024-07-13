@@ -1,10 +1,10 @@
 subarch: amd64
 target: stage1
 version_stamp: oubliette-hardened-openrc-@TIMESTAMP@
-rel_type: hardened
-profile: default/linux/amd64/17.1/hardened
+rel_type: 23.0-hardened
+profile: default/linux/amd64/23.0/hardened
 snapshot: @TIMESTAMP@
-source_subpath: hardened/stage3-amd64-oubliette-hardened-openrc-latest
+source_subpath: 23.0-hardened/stage3-amd64-oubliette-hardened-openrc-latest
 compression_mode: pixz
 update_seed: yes
 update_seed_command: --update --deep --newuse @world

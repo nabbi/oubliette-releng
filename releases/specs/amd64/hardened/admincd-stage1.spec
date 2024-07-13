@@ -1,10 +1,10 @@
 subarch: amd64
 version_stamp: oubliette-@TIMESTAMP@
 target: livecd-stage1
-rel_type: hardened
-profile: default/linux/amd64/17.1/hardened
+rel_type: 23.0-hardened
+profile: default/linux/amd64/23.0/hardened
 snapshot: @TIMESTAMP@
-source_subpath: hardened/stage3-amd64-oubliette-hardened-openrc-@TIMESTAMP@
+source_subpath: 23.0-hardened/stage3-amd64-oubliette-hardened-openrc-@TIMESTAMP@
 compression_mode: pixz
 portage_confdir: /opt/oubliette-releng/releases/portage/isos
 
@@ -76,6 +76,7 @@ livecd/packages:
 	app-text/dos2unix
 	app-text/wgetpaste
 	app-vim/gentoo-syntax
+	dev-debug/strace
 	dev-lang/perl
 	dev-lang/python
 	dev-vcs/git
@@ -139,6 +140,7 @@ livecd/packages:
 	sys-apps/hdparm
 	sys-apps/ipmitool
 	sys-apps/iproute2
+	sys-apps/kexec-tools
 	sys-apps/less
 	sys-apps/man-db
 	sys-apps/man-pages
@@ -150,6 +152,7 @@ livecd/packages:
 	sys-apps/nvme-cli
 	sys-apps/pciutils
 	sys-apps/pcmciautils
+	sys-apps/pv
 	sys-apps/sdparm
 	sys-apps/usbutils
 	sys-apps/sed
@@ -168,6 +171,7 @@ livecd/packages:
 	sys-block/tw_cli
 	sys-boot/efibootmgr
 	sys-boot/grub
+	sys-firmware/b43-firmware
 	sys-firmware/ipw2100-firmware
 	sys-firmware/ipw2200-firmware
 	sys-fs/bcache-tools
@@ -191,6 +195,7 @@ livecd/packages:
 	sys-fs/ncdu
 	sys-fs/ntfs3g
 	sys-fs/reiserfsprogs
+	sys-fs/xfsdump
 	sys-fs/xfsprogs
 	sys-kernel/linux-firmware
 	sys-libs/gpm

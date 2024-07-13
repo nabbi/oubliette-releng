@@ -1,11 +1,11 @@
 subarch: amd64
 target: stage4
 version_stamp: hardened-oubliette-server-@TIMESTAMP@
-rel_type: hardened
-profile: default/linux/amd64/17.1/hardened
+rel_type: 23.0-hardened
+profile: default/linux/amd64/23.0/hardened
 compression_mode: pixz
 snapshot: @TIMESTAMP@
-source_subpath: hardened/stage3-amd64-oubliette-hardened-openrc-@TIMESTAMP@
+source_subpath: 23.0-hardened/stage3-amd64-oubliette-hardened-openrc-@TIMESTAMP@
 portage_confdir: @REPO_DIR@/releases/portage/isos
 repos: /var/db/repos/oubliette
 

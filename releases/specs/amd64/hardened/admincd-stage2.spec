@@ -1,10 +1,10 @@
 subarch: amd64
 version_stamp: oubliette-@TIMESTAMP@
 target: livecd-stage2
-rel_type: hardened
-profile: default/linux/amd64/17.1/hardened
+rel_type: 23.0-hardened
+profile: default/linux/amd64/23.0/hardened
 snapshot: @TIMESTAMP@
-source_subpath: hardened/livecd-stage1-amd64-oubliette-@TIMESTAMP@
+source_subpath: 23.0-hardened/livecd-stage1-amd64-oubliette-@TIMESTAMP@
 portage_confdir: @REPO_DIR@/releases/portage/isos
 
 livecd/bootargs: dokeymap iommu=soft
@@ -16,9 +16,9 @@ livecd/volid: Gentoo amd64 AdminCD oubliette @TIMESTAMP@
 boot/kernel: gentoo
 
 boot/kernel/gentoo/sources: gentoo-sources
-boot/kernel/gentoo/config: @REPO_DIR@/releases/kconfig/amd64/amd64-5.15.80.config
+boot/kernel/gentoo/config: @REPO_DIR@/releases/kconfig/amd64/amd64-6.6.30.config
 
-boot/kernel/gentoo/packages: --usepkg n zfs zfs-kmod
+boot/kernel/gentoo/packages: --usepkg n zfs zfs-kmod broadcom-sta
 
 livecd/unmerge:
 	app-admin/eselect
@@ -27,6 +27,8 @@ livecd/unmerge:
 	app-admin/perl-cleaner
 	app-admin/python-updater
 	app-arch/cpio
+	dev-build/libtool
+	dev-lang/rust-bin
 	dev-libs/gmp
 	dev-libs/libxml2
 	dev-libs/mpfr
@@ -75,10 +77,10 @@ livecd/empty:
 	/etc/modules.autoload.d
 	/etc/runlevels/single
 	/etc/skel
-	/lib/dev-state
-	/lib/udev-state
-	/lib64/dev-state
-	/lib64/udev-state
+	/usr/lib/dev-state
+	/usr/lib/udev-state
+	/usr/lib64/dev-state
+	/usr/lib64/udev-state
 	/root/.ccache
 	/tmp
 	/usr/diet/include
