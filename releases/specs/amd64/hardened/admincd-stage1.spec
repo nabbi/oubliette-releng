@@ -3,7 +3,7 @@ version_stamp: oubliette-@TIMESTAMP@
 target: livecd-stage1
 rel_type: 23.0-hardened
 profile: default/linux/amd64/23.0/hardened
-snapshot: @TIMESTAMP@
+snapshot_treeish: @TREEISH@
 source_subpath: 23.0-hardened/stage3-amd64-oubliette-hardened-openrc-@TIMESTAMP@
 compression_mode: pixz
 portage_confdir: /opt/oubliette-releng/releases/portage/isos

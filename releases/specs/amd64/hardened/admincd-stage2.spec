@@ -3,7 +3,7 @@ version_stamp: oubliette-@TIMESTAMP@
 target: livecd-stage2
 rel_type: 23.0-hardened
 profile: default/linux/amd64/23.0/hardened
-snapshot: @TIMESTAMP@
+snapshot_treeish: @TREEISH@
 source_subpath: 23.0-hardened/livecd-stage1-amd64-oubliette-@TIMESTAMP@
 portage_confdir: @REPO_DIR@/releases/portage/isos
 

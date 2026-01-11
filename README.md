@@ -37,7 +37,7 @@ git submodule update --init --recursive
 catalyst-auto depends on time for statistical process reporting, but it cannot call the bash built in time command
 
 ```shell
-emerge -qva sys-process/time
+sudo emerge -qva sys-process/time
 ```
 
 ## distcc config
@@ -50,7 +50,7 @@ Copy this file into /etc/catalyst/catalyst.conf
 
 
 ```shell
-./tools/download-stage3-seed.sh
+sudo ./tools/download-stage3-seed.sh
 ```
 
 ## add oubliette overlay
@@ -58,13 +58,13 @@ Copy this file into /etc/catalyst/catalyst.conf
 The spec files expect default paths at /var/db/repos/oubliette
 
 ```shell
-eselect repository enable oubliette
+sudo eselect repository enable oubliette
 ```
 
 
 # run catalyst-auto
 
 ```shell
-./tools/catalyst-auto -X -v -c tools/catalyst-auto-amd64.conf
+sudo ./tools/catalyst-auto -X -v -c tools/catalyst-auto-amd64.conf
 ```
 

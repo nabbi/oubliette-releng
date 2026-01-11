@@ -3,7 +3,7 @@ target: stage1
 version_stamp: oubliette-hardened-openrc-@TIMESTAMP@
 rel_type: 23.0-hardened
 profile: default/linux/amd64/23.0/hardened
-snapshot: @TIMESTAMP@
+snapshot_treeish: @TREEISH@
 source_subpath: 23.0-hardened/stage3-amd64-oubliette-hardened-openrc-latest
 compression_mode: pixz
 update_seed: yes

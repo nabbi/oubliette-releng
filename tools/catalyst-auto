@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 1999-2023 Gentoo Foundation
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 CATALYST_CONFIG=/etc/catalyst/catalyst.conf
@@ -9,7 +9,7 @@ REPO_DIR=$(dirname "$(dirname "$(realpath "$0")")")
 
 # Set up defaults that config files can override if they want.
 SUBARCH=$(uname -m)
-#EMAIL_TO=""
+# EMAIL_TO=""
 # Use full hostname by default as Gentoo servers will reject short names.
 EMAIL_FROM="catalyst@$(hostname -f)"
 EMAIL_SUBJECT_PREPEND="[${SUBARCH}-auto]"
@@ -404,13 +404,10 @@ run_catalyst_commands() {
 			done
 		fi
 
-		if [[ -n ${TREEISH} ]]; then
-			sed -i -e "s|snapshot:.*|snapshot_treeish: ${TREEISH}|g" "${i}"
-		fi
-
 		# Expand vars that the spec expects us to.
 		sed -i \
 			-e "s:@TIMESTAMP@:${TIMESTAMP}:g" \
+			-e "s:@DATESTAMP@:${DATESTAMP}:g" \
 			-e "s:@REPO_DIR@:${REPO_DIR}:g" \
 			-e "s:@TREEISH@:${TREEISH}:g" \
 			"${i}"
@@ -454,7 +451,7 @@ run_catalyst_commands() {
 			fi
 
 			for i in ${!specs_var}; do
-				LOGFILE="${TMPDIR}/log/$(echo "${i}" | sed -e 's:/:_:' -e 's:\.spec$::').log"
+				LOGFILE="${TMPDIR}/log/$(echo "${i}" | sed -e 's:/:_:g' -e 's:\.spec$::').log"
 				specpath=$(readlink -f "${i}")
 				run_cmd "${LOGFILE}" "${timeprefix[@]}" catalyst -a -c "${CATALYST_CONFIG}" -f "${specpath}"
 				if [[ $? != 0 ]]; then
@@ -467,7 +464,7 @@ run_catalyst_commands() {
 			done
 
 			for i in ${!optional_specs_var}; do
-				LOGFILE="${TMPDIR}/log/$(echo "${i}" | sed -e 's:/:_:' -e 's:\.spec$::').log"
+				LOGFILE="${TMPDIR}/log/$(echo "${i}" | sed -e 's:/:_:g' -e 's:\.spec$::').log"
 				specpath=$(readlink -f "${i}")
 				run_cmd "${LOGFILE}" "${timeprefix[@]}" catalyst -a -c "${CATALYST_CONFIG}" -f "${specpath}"
 				if [[ $? != 0 ]]; then
@@ -513,6 +510,10 @@ run_catalyst_commands() {
 		for i in ${!specs_var} ${!optional_specs_var}; do
 			LOGFILE="${TMPDIR}/log/$(echo "${i}" | sed -e 's:/:_:' -e 's:\.spec$::')_purge.log"
 			specpath=$(readlink -f "${i}")
+			# Bail out of cleaning (eg) stage3-openrc.spec failure if
+			#  CLST_AUTO_NOCLEAN="stage3-openrc.spec" is set
+			run_cmd "${LOGFILE}" "${timeprefix[@]}"  echo "Testing ${i} against CLST_AUTO_NOCLEAN=${CLST_AUTO_NOCLEAN}"
+			[[ ${CLST_AUTO_NOCLEAN} == *${i}* ]] ||
 			run_cmd "${LOGFILE}" "${timeprefix[@]}" catalyst --purgetmponly -c "${CATALYST_CONFIG}" -f "${specpath}"
 		done
 		update_symlinks
@@ -548,7 +549,7 @@ main() {
 	git_update "$@"
 
 	# Verify DNSSEC works
-	#verify_dnssec
+	# verify_dnssec
 
 	# Try to isolate ourselves from the rest of the system.
 	containerize "$@"

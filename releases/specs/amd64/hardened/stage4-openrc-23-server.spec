@@ -4,7 +4,7 @@ version_stamp: hardened-oubliette-server-@TIMESTAMP@
 rel_type: 23.0-hardened
 profile: default/linux/amd64/23.0/hardened
 compression_mode: pixz
-snapshot: @TIMESTAMP@
+snapshot_treeish: @TREEISH@
 source_subpath: 23.0-hardened/stage3-amd64-oubliette-hardened-openrc-@TIMESTAMP@
 portage_confdir: @REPO_DIR@/releases/portage/isos
 repos: /var/db/repos/oubliette
