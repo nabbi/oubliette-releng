@@ -26,7 +26,7 @@ livecd/packages:
 	app-accessibility/espeakup
 	app-admin/hddtemp
 	app-admin/pwgen
-	app-admin/syslog-ng
+	app-admin/sysklogd
 	app-admin/sysstat
 	app-admin/testdisk
 	app-arch/bzip2
@@ -39,6 +39,7 @@ livecd/packages:
 	app-arch/tar
 	app-arch/unrar
 	app-arch/unzip
+	app-backup/borgbackup
 	app-backup/duplicity
 	app-backup/fsarchiver
 	app-benchmarks/bonnie
@@ -57,7 +58,6 @@ livecd/packages:
 	app-editors/vim
 	app-emacs/ebuild-mode
 	app-emulation/cloud-init
-	app-emulation/xen-tools
 	app-misc/colordiff
 	app-misc/livecd-tools
 	app-misc/mc
@@ -76,6 +76,7 @@ livecd/packages:
 	app-text/dos2unix
 	app-text/wgetpaste
 	app-vim/gentoo-syntax
+	dev-build/cmake
 	dev-debug/strace
 	dev-lang/perl
 	dev-lang/python
@@ -105,13 +106,14 @@ livecd/packages:
 	net-misc/ndisc6
 	net-misc/openssh
 	net-misc/rdate
+	net-misc/networkmanager
 	net-misc/rsync
 	net-misc/telnet-bsd
 	net-misc/vconfig
 	net-misc/wget
 	net-misc/whois
 	net-proxy/dante
-	net-proxy/tsocks
+	net-proxy/torsocks
 	net-vpn/openvpn
 	net-wireless/b43-fwcutter
 	net-wireless/iw
@@ -175,6 +177,7 @@ livecd/packages:
 	sys-firmware/ipw2100-firmware
 	sys-firmware/ipw2200-firmware
 	sys-fs/bcache-tools
+	sys-fs/bcachefs-tools
 	sys-fs/btrfs-progs
 	sys-fs/cryptsetup
 	sys-fs/ddrescue
@@ -201,6 +204,7 @@ livecd/packages:
 	sys-libs/gpm
 	sys-libs/libsmbios
 	sys-power/acpid
+	sys-process/btop
 	sys-process/htop
 	sys-process/lsof
 	sys-process/iotop
