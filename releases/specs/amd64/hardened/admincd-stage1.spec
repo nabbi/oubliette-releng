@@ -6,7 +6,7 @@ profile: default/linux/amd64/23.0/hardened
 snapshot_treeish: @TREEISH@
 source_subpath: 23.0-hardened/stage3-amd64-oubliette-hardened-openrc-@TIMESTAMP@
 compression_mode: pixz
-portage_confdir: /opt/oubliette-releng/releases/portage/isos
+portage_confdir: @REPO_DIR@/releases/portage/isos
 
 livecd/use:
 	alsa

@@ -11,7 +11,7 @@ livecd/bootargs: dokeymap iommu=soft
 livecd/fstype: squashfs
 livecd/iso: admincd-amd64-oubliette-@TIMESTAMP@.iso
 livecd/type: gentoo-release-minimal
-livecd/volid: Gentoo amd64 AdminCD Oubliette @TIMESTAMP@
+livecd/volid: Gentoo-amd64-AdminCD-Oubliette-@TIMESTAMP@
 
 # livecd/rcadd: dbus|default gpm|default NetworkManager|default
 
@@ -166,6 +166,6 @@ livecd/rm:
 livecd/rcadd:
     sshd|default
 
-livecd/root_overlay: /opt/oubliette-releng/overlay/admincd/
+livecd/root_overlay: @REPO_DIR@/overlay/admincd/
 
 repos: /var/db/repos/oubliette

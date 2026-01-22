@@ -33,7 +33,7 @@ stage4/rcadd:
 
 boot/kernel: gentoo
 boot/kernel/gentoo/sources: gentoo-sources
-boot/kernel/gentoo/config: /opt/oubliette-releng/releases/kconfig/arm64/packet-arm64.config
+boot/kernel/gentoo/config: @REPO_DIR@/releases/kconfig/arm64/packet-arm64.config
 boot/kernel/gentoo/extraversion: openstack
 boot/kernel/gentoo/gk_kernargs: --all-ramdisk-modules
 
