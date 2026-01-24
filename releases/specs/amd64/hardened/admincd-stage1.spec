@@ -214,6 +214,11 @@ livecd/packages:
 	# tools
 	app-forensics/cmospwd
 	app-editors/bvi
+	sys-apps/diffutils
+	sys-devel/patch
+	# file io
+	net-fs/sshfs
+	app-arch/cpio
 	# networking
 	net-analyzer/fping
 	net-misc/iperf
@@ -221,6 +226,7 @@ livecd/packages:
 	net-misc/sipcalc
 	net-analyzer/hping
 	net-analyzer/sslscan
+	net-misc/lldpd
 	net-misc/socat
 	net-ftp/atftp
 	# dev

@@ -1,5 +1,5 @@
 dev-lang/tcl
-dev-tcltk/udp **
+net-analyzer/fping
 net-analyzer/sslscan
 net-misc/whois
 net-ftp/atftp
