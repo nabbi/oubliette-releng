@@ -8,6 +8,7 @@ source_subpath: 23.0-hardened/livecd-stage1-amd64-oubliette-@TIMESTAMP@
 portage_confdir: @REPO_DIR@/releases/portage/isos
 
 livecd/bootargs: dokeymap iommu=soft
+livecd/fsscript: @REPO_DIR@/releases/scripts/oubliette-admincd.sh
 livecd/fstype: squashfs
 livecd/iso: admincd-amd64-oubliette-@TIMESTAMP@.iso
 livecd/type: gentoo-release-minimal
@@ -40,7 +41,7 @@ livecd/unmerge:
 	perl-core/PodParser
 	perl-core/Test-Harness
 	sys-apps/debianutils
-	sys-apps/diffutils
+	# sys-apps/diffutils
 	sys-apps/groff
 	# sys-apps/man-db
 	# sys-apps/man-pages
@@ -62,7 +63,7 @@ livecd/unmerge:
 	sys-devel/gnuconfig
 	sys-devel/m4
 	dev-build/make
-	sys-devel/patch
+	# sys-devel/patch
 	sys-libs/db
 	sys-libs/gdbm
 	sys-kernel/dracut

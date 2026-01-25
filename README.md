@@ -24,11 +24,9 @@ These spec and conf files are incompatible with previous stable catalyst-3.0.17 
 
 # initial setup
 
-I cloned this repo locally under /opt
-
 ```shell
-git clone https://github.com/nabbi/oubliette-releng /opt/oubliette-releng
-cd /opt/oubliette-releng
+git clone https://github.com/nabbi/oubliette-releng
+cd oubliette-releng
 git submodule update --init --recursive 
 ```
 
@@ -46,13 +44,6 @@ sudo emerge -qva sys-process/time
 
 Copy this file into /etc/catalyst/catalyst.conf
 
-## download latest stage3 seed
-
-
-```shell
-sudo ./tools/download-stage3-seed.sh
-```
-
 ## add oubliette overlay
 
 The spec files expect default paths at /var/db/repos/oubliette
@@ -62,9 +53,9 @@ sudo eselect repository enable oubliette
 ```
 
 
-# run catalyst-auto
+# run catalyst-auto via build script
 
 ```shell
-sudo ./tools/catalyst-auto -X -v -c tools/catalyst-auto-amd64.conf
+sudo ./tools/oubliette-build.sh
 ```
 

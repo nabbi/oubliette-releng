@@ -21,7 +21,7 @@ download() {
 }
 
 download amd64 hardened-openrc hardened
-download amd64 musl-hardened musl-hardened
+#download amd64 musl-hardened musl-hardened
 #download amd64 openrc default
 
-download arm64 openrc default
+#download arm64 openrc default

@@ -214,8 +214,6 @@ livecd/packages:
 	# tools
 	app-forensics/cmospwd
 	app-editors/bvi
-	sys-apps/diffutils
-	sys-devel/patch
 	# file io
 	net-fs/sshfs
 	app-arch/cpio
