@@ -1,0 +1,204 @@
+#!/usr/bin/env bash
+# Interactive sync tool: compare local fork files against upstream and selectively merge.
+#
+# Usage: sync-upstream [OPTIONS] [UPSTREAM_DIR]
+#   UPSTREAM_DIR  path to upstream repo (default: ../releng relative to this repo root)
+#
+# Options:
+#   -d, --dry-run     show differing files without prompting
+#   -n, --new         also list files present in upstream but not locally
+#   -p, --pager CMD   pager for diffs (default: less -R, or PAGER env var)
+#   -m, --merge CMD   merge tool (default: vimdiff)
+#   -h, --help        show this help
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+UPSTREAM_DIR=""
+DRY_RUN=false
+SHOW_NEW=false
+MERGE_TOOL="${MERGE_TOOL:-vimdiff}"
+PAGER="${PAGER:-less -R}"
+
+usage() {
+    sed -n '2,12p' "$0" | sed 's/^# \{0,1\}//'
+    exit 0
+}
+
+die() { echo "error: $*" >&2; exit 1; }
+
+# Parse args
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -d|--dry-run)  DRY_RUN=true ;;
+        -n|--new)      SHOW_NEW=true ;;
+        -p|--pager)    shift; PAGER="$1" ;;
+        -m|--merge)    shift; MERGE_TOOL="$1" ;;
+        -h|--help)     usage ;;
+        -*)            die "unknown option: $1" ;;
+        *)
+            [[ -z "$UPSTREAM_DIR" ]] || die "unexpected argument: $1"
+            UPSTREAM_DIR="$1"
+            ;;
+    esac
+    shift
+done
+
+if [[ -z "$UPSTREAM_DIR" ]]; then
+    UPSTREAM_DIR="$(cd "${REPO_ROOT}/../releng" 2>/dev/null && pwd)" \
+        || die "upstream not found at ../releng — pass path explicitly"
+fi
+
+[[ -d "$UPSTREAM_DIR" ]] || die "upstream directory not found: $UPSTREAM_DIR"
+
+# Resolve absolute paths
+LOCAL="$(cd "$REPO_ROOT" && pwd)"
+UPSTREAM="$(cd "$UPSTREAM_DIR" && pwd)"
+
+echo "Local:    $LOCAL"
+echo "Upstream: $UPSTREAM"
+echo
+
+# Collect local tracked files (exclude .git/)
+mapfile -t LOCAL_FILES < <(
+    find "$LOCAL" \
+        -not -path "$LOCAL/.git/*" \
+        -not -name ".git" \
+        -not -path "$LOCAL/.gitmodules" \
+        -type f \
+        | sed "s|^${LOCAL}/||" \
+        | sort
+)
+
+DIFF_COUNT=0
+UPDATED_COUNT=0
+SKIPPED_COUNT=0
+
+# Color codes
+RED='\033[0;31m'
+GRN='\033[0;32m'
+YLW='\033[1;33m'
+CYN='\033[0;36m'
+RST='\033[0m'
+
+separator() {
+    printf '%*s\n' "${COLUMNS:-80}" '' | tr ' ' '-'
+}
+
+prompt_action() {
+    local file="$1"
+    while true; do
+        printf "\n${YLW}File:${RST} %s\n" "$file"
+        printf "${CYN}Action:${RST} [k]eep local  [u]pdate from upstream  [v]imdiff  [s]kip  [q]uit  ? "
+        read -r ans </dev/tty
+        case "${ans,,}" in
+            k|keep)
+                printf "${GRN}kept local${RST}\n"
+                (( SKIPPED_COUNT++ )) || true
+                return 0
+                ;;
+            u|update)
+                cp -- "$UPSTREAM/$file" "$LOCAL/$file"
+                printf "${GRN}updated from upstream${RST}\n"
+                (( UPDATED_COUNT++ )) || true
+                return 0
+                ;;
+            v|vimdiff)
+                "$MERGE_TOOL" "$LOCAL/$file" "$UPSTREAM/$file" </dev/tty >/dev/tty 2>/dev/tty || true
+                printf "${GRN}merge done — keeping result in local${RST}\n"
+                (( UPDATED_COUNT++ )) || true
+                return 0
+                ;;
+            s|skip)
+                (( SKIPPED_COUNT++ )) || true
+                return 0
+                ;;
+            q|quit)
+                echo "Aborted."
+                exit 0
+                ;;
+            *)
+                echo "  k=keep  u=update  v=vimdiff  s=skip  q=quit"
+                ;;
+        esac
+    done
+}
+
+# Basenames to silently skip regardless of content differences
+SKIP_NAMES=( .gitignore README README.md )
+
+for rel_file in "${LOCAL_FILES[@]}"; do
+    upstream_file="$UPSTREAM/$rel_file"
+
+    # Skip files that don't exist upstream — they are local-only additions
+    [[ -f "$upstream_file" ]] || continue
+
+    # Skip by basename
+    basename="${rel_file##*/}"
+    skip=false
+    for skip_name in "${SKIP_NAMES[@]}"; do
+        [[ "$basename" == "$skip_name" ]] && { skip=true; break; }
+    done
+    $skip && continue
+
+    local_file="$LOCAL/$rel_file"
+
+    # Skip identical files
+    if diff -q "$local_file" "$upstream_file" &>/dev/null; then
+        continue
+    fi
+
+    # Binary files: just note they differ
+    if ! diff --text -q "$local_file" "$upstream_file" &>/dev/null 2>&1; then
+        if grep -qI '' "$local_file" 2>/dev/null && grep -qI '' "$upstream_file" 2>/dev/null; then
+            : # both text — fall through
+        else
+            printf "${RED}binary differs${RST}: %s\n" "$rel_file"
+            (( DIFF_COUNT++ )) || true
+            if ! $DRY_RUN; then
+                prompt_action "$rel_file"
+            fi
+            continue
+        fi
+    fi
+
+    (( DIFF_COUNT++ )) || true
+    separator
+    printf "${YLW}DIFF${RST}: %s\n" "$rel_file"
+
+    if $DRY_RUN; then
+        diff --color=always -u \
+            --label "local/$rel_file" \
+            --label "upstream/$rel_file" \
+            "$local_file" "$upstream_file" || true
+    else
+        diff --color=always -u \
+            --label "local/$rel_file" \
+            --label "upstream/$rel_file" \
+            "$local_file" "$upstream_file" \
+            | ${PAGER} || true
+        prompt_action "$rel_file"
+    fi
+done
+
+# Optionally show upstream-only files
+if $SHOW_NEW; then
+    echo
+    separator
+    printf "${CYN}Files present in upstream but not in local fork:${RST}\n"
+    found_new=false
+    while IFS= read -r -d '' f; do
+        rel="${f#${UPSTREAM}/}"
+        [[ ! -f "$LOCAL/$rel" ]] || continue
+        printf "  + %s\n" "$rel"
+        found_new=true
+    done < <(find "$UPSTREAM" -not -path "$UPSTREAM/.git/*" -type f -print0 | sort -z)
+    $found_new || echo "  (none)"
+fi
+
+echo
+separator
+printf "Summary: ${YLW}%d${RST} differing  ${GRN}%d${RST} updated  ${RST}%d${RST} kept/skipped\n" \
+    "$DIFF_COUNT" "$UPDATED_COUNT" "$SKIPPED_COUNT"
