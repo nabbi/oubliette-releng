@@ -132,8 +132,23 @@ SKIP_NAMES=( .gitignore README README.md )
 for rel_file in "${LOCAL_FILES[@]}"; do
     upstream_file="$UPSTREAM/$rel_file"
 
-    # Skip files that don't exist upstream — they are local-only additions
-    [[ -f "$upstream_file" ]] || continue
+    # Check files absent from upstream
+    if [[ ! -f "$upstream_file" ]]; then
+        # Query upstream git history; if the file was ever tracked it was deleted
+        if git -C "$UPSTREAM" log --oneline --follow -- "$rel_file" 2>/dev/null | grep -q .; then
+            printf "${RED}deleted upstream${RST}: %s\n" "$rel_file"
+            if ! $DRY_RUN; then
+                printf "  ${YLW}Action:${RST} [r]emove local  [k]eep  [q]uit  ? "
+                read -r ans </dev/tty
+                case "${ans,,}" in
+                    r|remove) rm -- "$LOCAL/$rel_file"; printf "${GRN}removed${RST}\n" ;;
+                    q|quit)   echo "Aborted."; exit 0 ;;
+                    *)        printf "kept\n" ;;
+                esac
+            fi
+        fi
+        continue
+    fi
 
     # Skip by basename
     basename="${rel_file##*/}"
