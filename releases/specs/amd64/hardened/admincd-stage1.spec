@@ -212,6 +212,7 @@ livecd/packages:
 	sys-process/psmisc
 	www-client/links
 	# tools
+	sys-apps/edac-utils
 	app-forensics/cmospwd
 	app-editors/bvi
 	# file io

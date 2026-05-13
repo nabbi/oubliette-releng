@@ -9,6 +9,8 @@ log() {
     printf '[oubliette build] %s\n' "$*"
 }
 
+[[ $(id -u) -eq 0 ]] || { log "Error: must be run as root"; exit 1; }
+
 log "Fetch latest Gentoo stage3 for seeding"
 "${TOOLS_DIR}/download-stage3-seed.sh"
 
