@@ -1,0 +1,257 @@
+#!/usr/bin/env bash
+# Purge old /var/tmp/catalyst builds, snapshots, and temporary dirs.
+#
+# Usage: purge-catalyst [OPTIONS]
+#
+# Options:
+#   -n, --dry-run           show what would be removed without deleting
+#   -s, --storedir PATH     catalyst store dir (default: from /etc/catalyst/catalyst.conf)
+#   --keep-builds N         keep N newest sets per artifact type per profile (default: 2)
+#   --keep-snapshots N      keep N newest portage snapshots (default: 3)
+#   --no-builds             skip pruning builds/
+#   --no-snapshots          skip pruning snapshots/
+#   --tmp                   purge tmp/ build chroots (skipped if catalyst is running)
+#   --packages              purge packages/ binary package cache
+#   --kerncache             purge kerncache/
+#   -h, --help              show this help
+
+set -euo pipefail
+
+STOREDIR=""
+DRY_RUN=false
+KEEP_BUILDS=2
+KEEP_SNAPSHOTS=3
+DO_BUILDS=true
+DO_SNAPSHOTS=true
+DO_TMP=false
+DO_PACKAGES=false
+DO_KERNCACHE=false
+
+RED='\033[0;31m'
+GRN='\033[0;32m'
+YLW='\033[1;33m'
+CYN='\033[0;36m'
+RST='\033[0m'
+
+usage() {
+    sed -n '2,19p' "$0" | sed 's/^# \{0,1\}//'
+    exit 0
+}
+
+die()  { printf "${RED}error:${RST} %s\n" "$*" >&2; exit 1; }
+info() { printf "${CYN}==>${RST} %s\n" "$*"; }
+warn() { printf "${YLW}warn:${RST} %s\n" "$*" >&2; }
+
+REMOVED_COUNT=0
+REMOVED_BYTES=0
+
+remove_path() {
+    local path="$1"
+    local size=0
+    if [[ -e "$path" || -L "$path" ]]; then
+        size=$(du -sb -- "$path" 2>/dev/null | cut -f1 || echo 0)
+    fi
+    if $DRY_RUN; then
+        printf "    ${YLW}would remove:${RST} %s\n" "$path"
+    else
+        printf "    ${RED}removing:${RST} %s\n" "$path"
+        rm -rf -- "$path"
+    fi
+    (( REMOVED_COUNT++ )) || true
+    (( REMOVED_BYTES += size )) || true
+}
+
+human_bytes() {
+    local b=$1
+    if (( b >= 1073741824 )); then
+        awk -v b="$b" 'BEGIN{printf "%.1f GiB", b/1073741824}'
+    elif (( b >= 1048576 )); then
+        awk -v b="$b" 'BEGIN{printf "%.1f MiB", b/1048576}'
+    elif (( b >= 1024 )); then
+        awk -v b="$b" 'BEGIN{printf "%.1f KiB", b/1024}'
+    else
+        printf "%d B" "$b"
+    fi
+}
+
+catalyst_storedir() {
+    local val
+    val=$(grep --color=never -Po '^storedir\s*=\s*\K.*' /etc/catalyst/catalyst.conf 2>/dev/null \
+          | sed 's/^"//;s/"$//' || true)
+    echo "${val:-/var/tmp/catalyst}"
+}
+
+# Prune a single profile subdir of builds/.
+# Groups files by artifact type (name sans timestamp), keeps $KEEP_BUILDS newest.
+prune_profile_dir() {
+    local dir="$1"
+    local -A seen_stems=()
+    local -A type_to_stems=()
+
+    while IFS= read -r -d '' f; do
+        local fname="${f##*/}"
+        # Match: <artifact-type>-<20YYYYMMDD[THHMMSSZ]>.<ext...>
+        if [[ "$fname" =~ ^(.+)-(20[0-9]{6}(T[0-9]{6}Z)?)\. ]]; then
+            local atype="${BASH_REMATCH[1]}"
+            local stamp="${BASH_REMATCH[2]}"
+            local stem="${atype}-${stamp}"
+            if [[ -z "${seen_stems[$stem]+x}" ]]; then
+                seen_stems[$stem]=1
+                type_to_stems[$atype]+="${type_to_stems[$atype]:+ }${stem}"
+            fi
+        fi
+    done < <(find "$dir" -maxdepth 1 -not -type l -type f -print0)
+
+    for atype in "${!type_to_stems[@]}"; do
+        # sort -r puts newest timestamp first (lexicographic works for YYYYMMDDTHHMMSSZ)
+        mapfile -t sorted < <(printf '%s\n' ${type_to_stems[$atype]} | sort -r)
+        local total=${#sorted[@]}
+        (( total <= KEEP_BUILDS )) && continue
+
+        local rm_count=$(( total - KEEP_BUILDS ))
+        printf "    Type: %s  (%d kept, %d removed)\n" "$atype" "$KEEP_BUILDS" "$rm_count"
+
+        for (( i = KEEP_BUILDS; i < total; i++ )); do
+            local stem="${sorted[$i]}"
+            while IFS= read -r -d '' f; do
+                remove_path "$f"
+            done < <(find "$dir" -maxdepth 1 -name "${stem}.*" -not -type l -print0 | sort -z)
+        done
+    done
+}
+
+prune_builds() {
+    local builds_dir="$STOREDIR/builds"
+    [[ -d "$builds_dir" ]] || { warn "builds/ not found, skipping"; return 0; }
+    info "Pruning builds/ (keeping $KEEP_BUILDS newest per artifact type)"
+
+    local found=false
+    while IFS= read -r -d '' profile_dir; do
+        found=true
+        printf "  Profile: %s\n" "${profile_dir#${builds_dir}/}"
+        prune_profile_dir "$profile_dir"
+    done < <(find "$builds_dir" -mindepth 1 -maxdepth 1 -type d -print0 | sort -z)
+
+    $found || warn "no profile subdirs found under builds/"
+}
+
+prune_snapshots() {
+    local snap_dir="$STOREDIR/snapshots"
+    [[ -d "$snap_dir" ]] || { warn "snapshots/ not found, skipping"; return 0; }
+    info "Pruning snapshots/ (keeping $KEEP_SNAPSHOTS newest)"
+
+    # Collect .sqfs files sorted by mtime, oldest first
+    mapfile -t sqfs_files < <(
+        find "$snap_dir" -maxdepth 1 -name '*.sqfs' -not -type l -printf '%T@ %p\n' \
+            | sort -n | awk '{print $2}'
+    )
+
+    local count=${#sqfs_files[@]}
+    if (( count <= KEEP_SNAPSHOTS )); then
+        printf "  Nothing to prune (%d snapshot(s) present)\n" "$count"
+        return 0
+    fi
+
+    local rm_count=$(( count - KEEP_SNAPSHOTS ))
+    printf "  Removing %d of %d snapshot(s)\n" "$rm_count" "$count"
+
+    for (( i = 0; i < rm_count; i++ )); do
+        local sqfs="${sqfs_files[$i]}"
+        local base="${sqfs%.sqfs}"
+        remove_path "$sqfs"
+        [[ -f "${base}.lock" ]] && remove_path "${base}.lock" || true
+    done
+}
+
+purge_dir_contents() {
+    local label="$1" dir="$2"
+    [[ -d "$dir" ]] || { warn "${label}/ not found, skipping"; return 0; }
+    info "Purging ${label}/"
+
+    local found=false
+    while IFS= read -r -d '' entry; do
+        found=true
+        remove_path "$entry"
+    done < <(find "$dir" -mindepth 1 -maxdepth 1 -print0 | sort -z)
+
+    $found || printf "  (empty)\n"
+}
+
+purge_tmp() {
+    local tmp_dir="$STOREDIR/tmp"
+    [[ -d "$tmp_dir" ]] || { warn "tmp/ not found, skipping"; return 0; }
+
+    if pgrep -x catalyst >/dev/null 2>&1; then
+        warn "catalyst is running — skipping tmp/ to avoid breaking an active build"
+        warn "re-run with --tmp after the build completes"
+        return 0
+    fi
+
+    info "Purging tmp/ build chroots"
+    local found=false
+    while IFS= read -r -d '' entry; do
+        found=true
+        remove_path "$entry"
+    done < <(find "$tmp_dir" -mindepth 1 -maxdepth 1 -print0 | sort -z)
+    $found || printf "  (empty)\n"
+
+    # Also clean stale catalyst-auto.* work dirs left in /tmp
+    local stale_found=false
+    while IFS= read -r -d '' entry; do
+        stale_found=true
+        remove_path "$entry"
+    done < <(find /tmp -mindepth 1 -maxdepth 1 -name 'catalyst-auto.*' -print0 | sort -z)
+    if $stale_found; then
+        info "Cleaned stale catalyst-auto.* dirs from /tmp"
+    fi
+}
+
+parse_args() {
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -n|--dry-run)       DRY_RUN=true ;;
+            -s|--storedir)      shift; STOREDIR="$1" ;;
+            --keep-builds)      shift; KEEP_BUILDS="$1"
+                                [[ "$KEEP_BUILDS" =~ ^[0-9]+$ ]] || die "--keep-builds requires a number" ;;
+            --keep-snapshots)   shift; KEEP_SNAPSHOTS="$1"
+                                [[ "$KEEP_SNAPSHOTS" =~ ^[0-9]+$ ]] || die "--keep-snapshots requires a number" ;;
+            --no-builds)        DO_BUILDS=false ;;
+            --no-snapshots)     DO_SNAPSHOTS=false ;;
+            --tmp)              DO_TMP=true ;;
+            --packages)         DO_PACKAGES=true ;;
+            --kerncache)        DO_KERNCACHE=true ;;
+            -h|--help)          usage ;;
+            -*)                 die "unknown option: $1" ;;
+            *)                  die "unexpected argument: $1" ;;
+        esac
+        shift
+    done
+}
+
+main() {
+    parse_args "$@"
+
+    [[ -z "$STOREDIR" ]] && STOREDIR="$(catalyst_storedir)"
+    [[ -d "$STOREDIR" ]] || die "storedir not found: $STOREDIR"
+
+    printf "Storedir: %s\n" "$STOREDIR"
+    $DRY_RUN && printf "${YLW}Dry run — nothing will be deleted${RST}\n"
+    echo
+
+    $DO_BUILDS    && prune_builds
+    $DO_SNAPSHOTS && prune_snapshots
+    $DO_TMP       && purge_tmp
+    $DO_PACKAGES  && purge_dir_contents packages "$STOREDIR/packages"
+    $DO_KERNCACHE && purge_dir_contents kerncache "$STOREDIR/kerncache"
+
+    echo
+    if $DRY_RUN; then
+        printf "Summary: would remove ${YLW}%d${RST} item(s) (~%s)\n" \
+            "$REMOVED_COUNT" "$(human_bytes $REMOVED_BYTES)"
+    else
+        printf "Summary: removed ${GRN}%d${RST} item(s) (~%s)\n" \
+            "$REMOVED_COUNT" "$(human_bytes $REMOVED_BYTES)"
+    fi
+}
+
+main "$@"
