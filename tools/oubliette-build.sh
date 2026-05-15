@@ -16,7 +16,7 @@ log "Fetch latest Gentoo stage3 for seeding"
 
 
 log "Purge previously built live packages"
-find /var/tmp/catalyst/packages/ -name "*-9999*" -type f -print -delete
+find /var/tmp/catalyst/packages/ -name "*-9999*" -type f -print -delete 2>/dev/null || true
 
 for profile_dir in "/var/tmp/catalyst/packages"/*; do
     [[ -d ${profile_dir} ]] || continue
