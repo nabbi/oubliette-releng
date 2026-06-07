@@ -1,0 +1,86 @@
+# /etc/cron.d/catalyst — Oubliette release engineering automated build schedule
+#
+# INSTALLATION
+#   cp /opt/gentoo/oubliette-releng/config/cron.d/oubliette-relen /etc/cron.d/oubliette-relen
+#   chmod 644 /etc/cron.d/oubliette-relen
+#
+# OVERVIEW
+#   Two jobs are scheduled:
+#
+#   1. PURGE (weekly, Sunday 01:00)
+#      Removes old catalyst artifacts, keeping the 2 newest build sets and
+#      3 newest portage snapshots.  Runs weekly regardless of whether the
+#      build fired automatically or was triggered manually, so disk space is
+#      reclaimed on a predictable schedule.
+#
+#   2. BUILD (quarterly, 1st of Jan/Apr/Jul/Oct at 02:00)
+#      Fetches the latest Gentoo seed stage3, rebuilds all oubliette hardened
+#      stages via catalyst, and re-indexes the binary package cache.
+#      To switch to monthly builds, change "1 1,4,7,10" to "1 *" in the
+#      build job line below.
+#
+#   The purge runs one hour before the build so disk space is freed before
+#   a new build starts.  If you reschedule the build, keep the purge at
+#   least one hour earlier.
+#
+# EMAIL NOTIFICATIONS
+#   ADMIN_EMAIL below controls two independent notification channels:
+#
+#   a) Script-level email (--mailto flag):
+#      - oubliette-build.sh sends a failure alert (with the last 100 lines
+#        of the build log) if the build exits non-zero.
+#      - oubliette-build.sh sends a success summary listing every new stage
+#        tarball and ISO produced by the run.
+#      - purge-previous-catalyst sends a short failure alert if it exits
+#        non-zero.
+#      Set ADMIN_EMAIL to an address to enable these.  Leave it empty to
+#      silence script-level email entirely.
+#
+#   b) Cron-level email (MAILTO):
+#      Any output that escapes the scripts' own log redirection (e.g. an
+#      unexpected crash before --logfile takes effect) is emailed by cron
+#      to MAILTO.  This is set to ADMIN_EMAIL below so both channels go to
+#      the same address, but you can set them independently.
+#
+#   To disable all email: set both ADMIN_EMAIL and MAILTO to empty strings.
+#
+# LOGS
+#   Build output is appended to /var/log/oubliette/build.log.
+#   Purge output is appended to /var/log/oubliette/purge.log.
+#   See config/logrotate.d/oubliette-relen for the companion logrotate rule.
+#
+# MANUAL TEST RUNS
+#   Dry-run purge (shows what would be removed, no deletions):
+#     /opt/gentoo/oubliette-releng/tools/purge-previous-catalyst --dry-run
+#
+#   Full build with email and logging (same flags as the cron job):
+#     /opt/gentoo/oubliette-releng/tools/oubliette-build.sh \
+#         --mailto you@example.com \
+#         --logfile /var/log/oubliette/build.log
+
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+# Recipient for failure alerts and build summaries.
+# Set to an email address, "root", or leave empty to disable script email.
+ADMIN_EMAIL=root
+
+# Cron sends unexpected output (crashes before log redirect) here.
+MAILTO=root
+
+# ┌── minute (0-59)
+# │  ┌── hour (0-23)
+# │  │  ┌── day of month (1-31)
+# │  │  │  ┌── month (1-12)
+# │  │  │  │           ┌── day of week (0=Sun … 6=Sat)
+# │  │  │  │           │  ┌── user
+# │  │  │  │           │  │     ┌── command
+# │  │  │  │           │  │     │
+
+# Weekly: purge old catalyst artifacts every Sunday at 01:00.
+# --tmp removes leftover build chroots; safe when catalyst is not running.
+0 1 * * 0 root /opt/gentoo/oubliette-releng/tools/purge-previous-catalyst --tmp --mailto "${ADMIN_EMAIL}" >> /var/log/oubliette/purge.log 2>&1
+
+# Quarterly: build stages on the 1st of Jan, Apr, Jul, Oct at 02:00.
+# To switch to monthly builds, change "1 1,4,7,10" to "1 *".
+0 2 1 1,4,7,10 * root /opt/gentoo/oubliette-releng/tools/oubliette-build.sh --mailto "${ADMIN_EMAIL}" --logfile /var/log/oubliette/build.log

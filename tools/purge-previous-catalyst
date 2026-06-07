@@ -13,6 +13,7 @@
 #   --tmp                   purge tmp/ build chroots (skipped if catalyst is running)
 #   --packages              purge packages/ binary package cache
 #   --kerncache             purge kerncache/
+#   --mailto EMAIL          send failure alert to EMAIL on non-zero exit
 #   -h, --help              show this help
 
 set -euo pipefail
@@ -26,21 +27,38 @@ DO_SNAPSHOTS=true
 DO_TMP=false
 DO_PACKAGES=false
 DO_KERNCACHE=false
+MAILTO=""
 
 RED='\033[0;31m'
 GRN='\033[0;32m'
 YLW='\033[1;33m'
 CYN='\033[0;36m'
 RST='\033[0m'
+# Strip ANSI colors when not writing to a terminal (e.g. cron log files).
+[[ -t 1 ]] || { RED='' GRN='' YLW='' CYN='' RST=''; }
 
 usage() {
-    sed -n '2,19p' "$0" | sed 's/^# \{0,1\}//'
+    sed -n '2,20p' "$0" | sed 's/^# \{0,1\}//'
     exit 0
 }
 
 die()  { printf "${RED}error:${RST} %s\n" "$*" >&2; exit 1; }
 info() { printf "${CYN}==>${RST} %s\n" "$*"; }
 warn() { printf "${YLW}warn:${RST} %s\n" "$*" >&2; }
+
+send_email() {
+    local subject="$1" body="$2"
+    [[ -n "$MAILTO" ]] || return 0
+    command -v sendmail >/dev/null 2>&1 || { warn "sendmail not found, skipping email"; return 0; }
+    printf 'To: %s\nSubject: [purge-catalyst] %s\n\n%s\n' \
+        "$MAILTO" "$subject" "$body" | sendmail -t 2>/dev/null || true
+}
+
+on_exit() {
+    local rc=$1
+    [[ $rc -ne 0 ]] || return 0
+    send_email "PURGE FAILED" "purge-previous-catalyst exited with code ${rc} at $(date)."
+}
 
 REMOVED_COUNT=0
 REMOVED_BYTES=0
@@ -220,6 +238,7 @@ parse_args() {
             --tmp)              DO_TMP=true ;;
             --packages)         DO_PACKAGES=true ;;
             --kerncache)        DO_KERNCACHE=true ;;
+            --mailto)           shift; MAILTO="${1:-}" ;;
             -h|--help)          usage ;;
             -*)                 die "unknown option: $1" ;;
             *)                  die "unexpected argument: $1" ;;
@@ -230,6 +249,7 @@ parse_args() {
 
 main() {
     parse_args "$@"
+    trap 'on_exit $?' EXIT
 
     [[ -z "$STOREDIR" ]] && STOREDIR="$(catalyst_storedir)"
     [[ -d "$STOREDIR" ]] || die "storedir not found: $STOREDIR"
