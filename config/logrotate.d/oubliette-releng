@@ -4,14 +4,14 @@
 #   cp /opt/gentoo/oubliette-releng/config/logrotate.d/oubliette-releng /etc/logrotate.d/oubliette-releng
 #
 # Covers:
-#   /var/log/oubliette/build.log  — catalyst build output (quarterly runs)
-#   /var/log/oubliette/purge.log  — artifact purge output (weekly runs)
+#   /var/log/oubliette-releng/build.log  — catalyst build output (quarterly runs)
+#   /var/log/oubliette-releng/purge.log  — artifact purge output (weekly runs)
 #
 # Rotation is monthly with 12 months retained.  Since the build only fires
 # quarterly, a single rotated file spans at most one build run; 12 rotations
 # gives three years of history at minimal disk cost.
 
-/var/log/oubliette/*.log {
+/var/log/oubliette-releng/*.log {
     monthly
     rotate 12
     compress
