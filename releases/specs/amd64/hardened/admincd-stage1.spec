@@ -176,9 +176,8 @@ livecd/packages:
 	sys-firmware/b43-firmware
 	sys-firmware/ipw2100-firmware
 	sys-firmware/ipw2200-firmware
-	# disable - catalyst build issues
-	# sys-fs/bcache-tools
-	# sys-fs/bcachefs-tools
+	sys-fs/bcache-tools
+	sys-fs/bcachefs-tools
 	sys-fs/btrfs-progs
 	sys-fs/cryptsetup
 	sys-fs/ddrescue
