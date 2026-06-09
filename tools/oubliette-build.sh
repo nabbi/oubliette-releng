@@ -22,13 +22,13 @@ usage() {
     exit 0
 }
 
-log() { printf '[oubliette build] %s\n' "$*"; }
+log() { printf '[oubliette releng] %s\n' "$*"; }
 
 send_email() {
     local subject="$1" body="$2"
     [[ -n "$MAILTO" ]] || return 0
     command -v sendmail >/dev/null 2>&1 || { log "sendmail not found, skipping email"; return 0; }
-    printf 'To: %s\nSubject: [oubliette-build] %s\n\n%s\n' \
+    printf 'To: %s\nSubject: [oubliette-releng] %s\n\n%s\n' \
         "$MAILTO" "$subject" "$body" | sendmail -t 2>/dev/null || true
 }
 
