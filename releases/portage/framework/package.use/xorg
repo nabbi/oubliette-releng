@@ -1,0 +1,5 @@
+# udev: hotplug input device support (libinput path requires it)
+x11-base/xorg-server udev
+
+# kdrive/xvfb not needed on a workstation; keep the build lean
+x11-base/xorg-server -kdrive -xvfb

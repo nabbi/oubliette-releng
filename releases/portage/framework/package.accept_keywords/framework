@@ -1,0 +1,11 @@
+# framework_tool / framework-tool-tui: not yet stabilized, needed for
+# battery charge limits, fan control, LEDs, and firmware version info on
+# Framework hardware.
+app-laptop/framework_tool ~amd64
+app-laptop/framework-tool-tui ~amd64
+
+# 9999 live ebuilds from the oubliette overlay
+x11-misc/alock **
+games-roguelike/evilhack **
+x11-wm/fluxbox **
+app-portage/genup **

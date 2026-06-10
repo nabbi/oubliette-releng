@@ -1,0 +1,4 @@
+# uefi: required for UEFI ESRT capsule updates (BIOS/EC firmware delivered
+# via LVFS for Framework hardware)
+# nvme: NVMe SSD firmware updates
+sys-apps/fwupd uefi nvme

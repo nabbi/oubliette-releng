@@ -1,0 +1,4 @@
+# harfbuzz: better shaping for non-Latin scripts and subpixel hinting
+media-libs/freetype harfbuzz
+
+# infinality is not in ::gentoo tree; harfbuzz is the supported path

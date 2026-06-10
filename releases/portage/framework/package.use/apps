@@ -1,0 +1,24 @@
+# fluxbox: vim-syntax adds fluxbox config file syntax highlighting to vim
+x11-wm/fluxbox vim-syntax
+
+# picom: needs opengl for rendering; drm for KMS-based tear prevention
+x11-misc/picom opengl drm
+
+# alock: imlib2 backend for image-based lock screens
+x11-misc/alock imlib
+
+# mpv: egl for hardware-accelerated rendering path
+media-video/mpv egl
+
+# firefox: hwaccel enables VA-API / VDPAU hardware video decode
+www-client/firefox hwaccel
+
+# zathura-pdf-mupdf: mupdf as the PDF rendering backend (lighter than poppler)
+# The default zathura backend is poppler; this switches it
+app-text/zathura-pdf-mupdf mupdf
+
+# pinentry: gtk3 frontend for GPG key entry dialogs
+app-crypt/pinentry gtk
+
+# dunst: wayland flag off — we're running X only
+x11-misc/dunst -wayland X
