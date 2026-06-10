@@ -1,0 +1,2 @@
+# dbus: exposes wpa_supplicant control interface over D-Bus
+net-wireless/wpa_supplicant dbus

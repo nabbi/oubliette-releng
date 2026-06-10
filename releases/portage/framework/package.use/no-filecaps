@@ -1,0 +1,3 @@
+# Hardened profile may set FEATURES="-filecaps" for some packages.
+# Ping needs filecaps to work without root; allow it here.
+net-misc/iputils filecaps

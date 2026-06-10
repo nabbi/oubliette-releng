@@ -1,0 +1,7 @@
+# alsa: ALSA compatibility layer (many apps still use it via pipewire-alsa)
+# jack: JACK compatibility for pro-audio apps (optional, adds minimal overhead)
+# sound-server: expose pipewire as a sound server (PulseAudio replacement)
+media-video/pipewire alsa sound-server
+
+# wireplumber needs pipewire built with dbus
+media-video/wireplumber dbus
