@@ -2,3 +2,11 @@
 media-libs/freetype harfbuzz
 
 # infinality is not in ::gentoo tree; harfbuzz is the supported path
+
+# Global USE=truetype pulls in dev-python/pillow[truetype], which adds a
+# build-time dep on media-libs/harfbuzz:=. harfbuzz requires glib (pango
+# needs harfbuzz[glib]), and glib unconditionally depends on
+# dev-python/docutils, which depends on pillow -- a circular dependency.
+# pillow is only pulled in transitively (via docutils, a glib dep), so its
+# own TrueType font support is irrelevant here.
+dev-python/pillow -truetype
