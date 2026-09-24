@@ -3,4 +3,5 @@
 # here to avoid failures in stage3
 app-crypt/libb2 -openmp
 app-portage/portage-utils -openmp
+dev-cpp/eigen -openmp
 sys-devel/gettext -openmp
