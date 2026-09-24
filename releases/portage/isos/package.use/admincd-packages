@@ -1,4 +1,3 @@
 dev-libs/libpcre2 jit
 mail-mta/ssmtp mta
 sys-apps/busybox -static
-sys-fs/bcachefs-tools -modules
