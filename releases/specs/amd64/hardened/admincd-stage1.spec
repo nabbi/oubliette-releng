@@ -34,7 +34,7 @@ livecd/packages:
 	app-arch/dpkg
 	app-arch/gzip
 	app-arch/mt-st
-	app-arch/p7zip
+	app-arch/7zip
 	app-arch/pbzip2
 	app-arch/tar
 	app-arch/unrar
@@ -93,7 +93,7 @@ livecd/packages:
 	net-dialup/minicom
 	net-dialup/pptpclient
 	net-dialup/rp-pppoe
-	net-dns/bind-tools
+	net-dns/bind
 	net-fs/cifs-utils
 	net-fs/nfs-utils
 	net-ftp/ftp

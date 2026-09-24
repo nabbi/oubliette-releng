@@ -48,7 +48,7 @@ stage4/packages:
 	net-firewall/iptables
 	net-firewall/nftables
 	net-firewall/xtables-addons
-	net-dns/bind-tools
+	net-dns/bind
 	net-dns/ddclient
 
 stage4/fsscript: @REPO_DIR@/releases/scripts/cloud-prep.sh
