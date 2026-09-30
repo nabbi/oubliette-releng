@@ -17,6 +17,7 @@ set -euo pipefail
 shopt -s nullglob
 
 TOOLS_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck disable=SC2034 # read by the sourced catalyst-auto conf
 REPO_DIR="$(dirname -- "${TOOLS_DIR}")"
 AUTO_CONF="${TOOLS_DIR}/catalyst-auto-amd64.conf"
 CATALYST_CONF=/etc/catalyst/catalyst.conf
@@ -58,7 +59,8 @@ on_exit() {
     local rc=$1
     [[ -n "$MAILTO" ]] || return 0
     if [[ $rc -ne 0 ]]; then
-        local body="Build failed with exit code ${rc} at $(date)."
+        local body
+        body="Build failed with exit code ${rc} at $(date)."
         if [[ -n "$LOGFILE" && -f "$LOGFILE" ]]; then
             body+=$'\n\nLast 100 lines of '"${LOGFILE}"':'
             body+=$'\n'"$(tail -n 100 "$LOGFILE" 2>/dev/null || true)"
@@ -99,6 +101,7 @@ parse_args() {
 list_specs() {
     (
         set +u
+        # shellcheck disable=SC2034 # read by the sourced catalyst-auto conf
         BUILD_SRCDIR_BASE="${STOREDIR}"
         # shellcheck source=catalyst-auto-amd64.conf
         source "${AUTO_CONF}"
