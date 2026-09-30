@@ -129,6 +129,16 @@ spec_output() {
         "$(spec_value "$spec" subarch)" "$(spec_value "$spec" version_stamp)"
 }
 
+# Catalyst autoresume skips setup_confdir, so the chroot keeps the
+# /etc/portage it was unpacked with. Drop that resume point to pick up
+# portage_confdir changes made since the failed run.
+refresh_confdir() {
+    local spec=$1
+    rm -f "$(printf '%s/tmp/%s/.autoresume-%s-%s-%s/setup_confdir' "${STOREDIR}" \
+        "$(spec_value "$spec" rel_type)" "$(spec_value "$spec" target)" \
+        "$(spec_value "$spec" subarch)" "$(spec_value "$spec" version_stamp)")"
+}
+
 spec_built() {
     local out
     out=$(spec_output "$1")
@@ -188,6 +198,7 @@ build_pending() {
 
         speclog="${run_dir}/log/$(echo "${spec}" | sed -e 's:/:_:g' -e 's:\.spec$::').log"
         log "${spec}: building (resume), log ${speclog}"
+        refresh_confdir "${specfile}"
         if catalyst -c "${CATALYST_CONF}" -f "${specfile}" >>"${speclog}" 2>&1; then
             link_latest "${run_dir}" "${specfile}"
             continue
