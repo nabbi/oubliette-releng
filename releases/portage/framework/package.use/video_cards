@@ -1,0 +1,4 @@
+# Framework 13 Pro (Intel Core Ultra Series 3, Xe3 graphics): the kernel only
+# ships the xe DRM driver, so build Intel userspace drivers only instead of the
+# arch/amd64 default (amdgpu fbdev intel nouveau radeon radeonsi vesa)
+*/* VIDEO_CARDS: -* intel

@@ -22,3 +22,6 @@ app-crypt/pinentry -gtk ncurses
 
 # dunst: wayland flag off — we're running X only
 x11-misc/dunst -wayland X
+
+# libvpx: firefox[system-libvpx] needs postproc
+media-libs/libvpx postproc
