@@ -17,8 +17,10 @@ www-client/firefox hwaccel
 # The default zathura backend is poppler; this switches it
 app-text/zathura-pdf-mupdf mupdf
 
-# pinentry: gtk3 frontend for GPG key entry dialogs
+# pinentry: gtk frontend for GPG key entry dialogs
+# Since 1.3.x the gtk frontend is built on gcr:4, which needs gcr's gtk (GTK4) support
 app-crypt/pinentry gtk
+app-crypt/gcr:4 gtk
 
 # dunst: wayland flag off — we're running X only
 x11-misc/dunst -wayland X
