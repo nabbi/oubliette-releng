@@ -25,3 +25,6 @@ x11-misc/dunst -wayland X
 
 # libvpx: firefox[system-libvpx] needs postproc
 media-libs/libvpx postproc
+
+# xmlto: xdg-utils (via dunst[xdg]) needs the text backend to build its docs
+app-text/xmlto text
