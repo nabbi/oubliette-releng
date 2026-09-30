@@ -122,7 +122,7 @@ stage4/packages:
 	games-roguelike/evilhack
 
 	## --- Storage ---
-	sys-block/nvme-cli
+	sys-apps/nvme-cli
 
 	## --- Thunderbolt ---
 	# bolt: userspace authorization daemon for Thunderbolt 4 / USB4 devices.
