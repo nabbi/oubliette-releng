@@ -59,3 +59,12 @@ sudo eselect repository enable oubliette
 sudo ./tools/oubliette-build.sh
 ```
 
+
+A failed build is resumed on the next run: specs whose output already exists
+are skipped and the failed spec continues via catalyst autoresume. Runs older
+than 72 hours are discarded and rebuilt from scratch.
+
+```shell
+sudo ./tools/oubliette-build.sh --full          # force a clean rebuild
+sudo ./tools/oubliette-build.sh --max-age 24    # only resume runs < 24h old
+```
