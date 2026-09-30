@@ -4,6 +4,9 @@
 app-laptop/framework_tool ~amd64
 app-laptop/framework-tool-tui ~amd64
 
+# brightnessctl: only ~amd64 in the oubliette overlay; backlight control.
+app-misc/brightnessctl ~amd64
+
 # 9999 live ebuilds from the oubliette overlay
 x11-misc/alock **
 games-roguelike/evilhack **
