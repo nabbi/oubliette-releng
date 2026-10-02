@@ -8,6 +8,7 @@ source_subpath: 23.0-hardened/livecd-stage1-amd64-oubliette-@TIMESTAMP@
 portage_confdir: @REPO_DIR@/releases/portage/isos
 
 livecd/bootargs: dokeymap iommu=soft
+livecd/cdtar: /usr/share/catalyst/livecd/cdtar/grub-theme-gentoo_frosted.tar.bz2
 livecd/fsscript: @REPO_DIR@/releases/scripts/oubliette-admincd.sh
 livecd/fstype: squashfs
 livecd/iso: admincd-amd64-oubliette-@TIMESTAMP@.iso
