@@ -27,7 +27,8 @@ to only what the hardware requires:
 | Subsystem | Firmware prefix | Hardware |
 |-----------|----------------|----------|
 | Intel Xe3 iGPU | `xe/ptl_*` | Panther Lake GuC/HuC/GSC firmware (Arc B390) |
-| Intel WiFi | `iwlwifi-bz-*` | BE211 (Wi-Fi 7) |
+| Intel Xe3 display | `i915/xe3lpd*_dmc.bin` | Display DMC (DC power states); `xe` loads it from `i915/` |
+| Intel WiFi | `iwlwifi-sc-*`, `iwlwifi-bz-*` | BE211 (Wi-Fi 7); kernel 7.2 iwlmld needs core `-c102`+ |
 | Intel Bluetooth | `intel/ibt-0040*`, `intel/ibt-0041*` | CNVi Bluetooth (paired with BE211) |
 | Intel DSP | `intel/dsp_fw*` | Legacy SST/ME subsystem firmware |
 
@@ -55,28 +56,38 @@ installed, `#`-prefixed lines are excluded.
 
 ## Kernel config
 
-The spec references `releases/kconfig/amd64/amd64-6.18.33-framework.config`, built by
-migrating the `amd64-6.6.30.config` cloud baseline forward to gentoo-sources-6.18.33 via
-`make olddefconfig` and then enabling the drivers this hardware needs:
+Framework lists **6.19 as the minimum kernel, 7.0+ recommended**
+(<https://frame.work/laptop13pro?tab=linux>). Stable `gentoo-sources` is 6.18, so
+`package.accept_keywords/framework` keywords `=sys-kernel/gentoo-sources-7.2*`. That entry is
+framework-only; the admincd stays on the stable kernel.
 
-- `CONFIG_DRM_XE` — Intel Xe3 iGPU (Arc B390, Panther Lake)
-- `CONFIG_SND_SOC_SOF_TOPLEVEL` + `CONFIG_SND_SOC_SOF_PANTHERLAKE` — Sound Open Firmware
-- `CONFIG_SOUNDWIRE` + `CONFIG_SND_SOC_CS42L43*` / `CONFIG_MFD_CS42L43*` — SoundWire bus and
-  CS42L43 codec
-- `CONFIG_INPUT_TOUCHSCREEN` + `CONFIG_I2C_HID_ACPI` — 2.8K touchscreen
-- `CONFIG_USB4` — Thunderbolt 4 / USB4 (used by `sys-apps/bolt`)
-- `CONFIG_CROS_EC` + `CONFIG_CROS_EC_LPC` — ChromeOS EC over LPC. The
-  `cros_ec_lpc` driver matches the `FRMWC004` ACPI device on Framework
-  laptops (see its DMI table). Backs battery charge thresholds
-  (`CONFIG_CROS_EC_SYSFS`), `/dev/cros_ec` (`CONFIG_CROS_EC_CHARDEV`),
-  keyboard backlight (`CONFIG_CROS_KBD_LED_BACKLIGHT`), and Type-C
-  mux/connector info (`CONFIG_CROS_EC_TYPEC`, `CONFIG_CROS_TYPEC_SWITCH`)
-  used by `app-laptop/framework_tool` and `power-profiles-daemon`.
+The spec references `releases/kconfig/amd64/amd64-7.2.8-framework.config`: the previous
+framework config migrated to gentoo-sources-7.2.8 with `make olddefconfig`, then
+`releases/kconfig/amd64/fragments/framework.config` merged on top. See
+`releases/kconfig/amd64/README.md` for the regeneration recipe. The fragment covers:
+
+- `DRM_XE` (+ `INTEL_MEI_GSC_PROXY`/`PXP`/`HDCP`): Arc B390 Xe3 iGPU. `DRM_SIMPLEDRM` +
+  `SYSFB_SIMPLEFB` keep a console on the GOP framebuffer until `xe` loads.
+- `PINCTRL_INTEL_PLATFORM`: Panther Lake GPIO. Touchpad/touchscreen IRQs depend on it.
+- `INTEL_IDLE`, `INT340X_THERMAL`, `INTEL_RAPL`, `INTEL_PMC_CORE`: idle states, thermal, power.
+- `IWLMLD` + `BT_HCIBTUSB`: BE211 Wi-Fi 7 (iwlmld op mode) and Bluetooth.
+- `HID_HAPTIC` + `HID_MULTITOUCH`, `I2C_HID_ACPI`, `INTEL_THC_HID`/`QUICKI2C`/`QUICKSPI`:
+  haptic touchpad and in-cell touchscreen.
+- `INTEL_ISH_HID` + `HID_SENSOR_ALS`: sensor hub (ambient light).
+- `SND_SOC_SOF_PANTHERLAKE`, `SND_SOC_SOF_HDA_LINK`/`HDA_AUDIO_CODEC`,
+  `SND_SOC_INTEL_SOUNDWIRE_SOF_MACH` (selects the SoundWire codecs incl. CS42L43/RT7xx):
+  internal audio and HDMI/DP audio.
+- `USB4`, `INTEL_IOMMU` (default on, Thunderbolt DMA protection), `TYPEC_UCSI`/`UCSI_ACPI`.
+- `USB_VIDEO_CLASS`: webcam. `DRM_ACCEL_IVPU`: NPU.
+- `CROS_EC_LPC` and friends: the `cros_ec_lpc` driver matches the `FRMWC004` ACPI device
+  on Framework laptops. Backs battery charge thresholds (`CHARGER_CROS_CONTROL`,
+  `CROS_EC_SYSFS`), `/dev/cros_ec`, keyboard backlight, and Type-C mux/connector info used by
+  `app-laptop/framework_tool` and `power-profiles-daemon`.
 
 This config was generated off-target (no Panther Lake hardware available), so it has not been
 boot-tested. Once built on real hardware, run `host/tune-kernel.sh` from
-`gentoo_initial_setup` to catch anything missing (e.g. exact pinctrl/GPIO IDs, fingerprint
-reader, Goodix touch controller variants) and refresh this config.
+`gentoo_initial_setup` to catch anything missing (e.g. exact touch controller variant,
+fingerprint reader) and fold the result back into the fragment.
 
 ## intel-microcode
 

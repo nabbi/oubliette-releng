@@ -177,9 +177,9 @@ stage4/rcadd:
 boot/kernel: gentoo
 boot/kernel/gentoo/sources: gentoo-sources
 # Framework 13 Pro (Panther Lake / Core Ultra Series 3) kernel config.
-# Adds DRM_XE (Arc B390 Xe3 iGPU), SOF + SoundWire + CS42L43 audio,
-# I2C HID ACPI touchscreen, and USB4 on top of the cloud config baseline.
-boot/kernel/gentoo/config: @REPO_DIR@/releases/kconfig/amd64/amd64-6.18.33-framework.config
+# gentoo-sources 7.2 (keyworded in portage/framework; vendor minimum is 6.19).
+# Framework-only options: releases/kconfig/amd64/fragments/framework.config
+boot/kernel/gentoo/config: @REPO_DIR@/releases/kconfig/amd64/amd64-7.2.8-framework.config
 boot/kernel/gentoo/extraversion: framework
 boot/kernel/gentoo/gk_kernargs: --all-ramdisk-modules
 

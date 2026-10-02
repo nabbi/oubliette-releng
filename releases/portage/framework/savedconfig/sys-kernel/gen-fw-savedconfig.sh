@@ -40,13 +40,16 @@ INPUT="$1"
 
     # Normalize input: strip any leading # from firmware paths (not from comment
     # lines that start with "# ") so we start from a clean uncommented baseline.
-    grep -v '^#' "${INPUT}" | grep -v '^$' | sort -u | while IFS= read -r line; do
+    sed -e 's/^#\([^ ]\)/\1/' "${INPUT}" | grep -v '^#' | grep -v '^$' | sort -u | while IFS= read -r line; do
 
         # ── Keep (uncommented = install) ──────────────────────────────────────
 
         # Intel Xe GPU — Panther Lake (ptl_*) GuC/HuC/GSC firmware. DRM_I915 is
-        # not enabled for this hardware, so plain i915/ blobs are not needed.
+        # not enabled for this hardware, so plain i915/ blobs are not needed...
         [[ "${line}" =~ ^xe/ptl_ ]]           && echo "${line}" && continue
+
+        # ...except the display DMC, which xe loads from i915/ (xe3lpd = PTL)
+        [[ "${line}" =~ ^i915/xe3lpd ]]       && echo "${line}" && continue
 
         # Intel WiFi — BE211 (Wi-Fi 7) uses iwlwifi-bz-* firmware
         [[ "${line}" =~ ^iwlwifi ]]           && echo "${line}" && continue
