@@ -3176,3 +3176,31 @@ iwlwifi-sc-a0-wh-b0-c103.ucode
 # Panther Lake display DMC (loaded by xe from i915/), from linux-firmware-20260622
 i915/xe3lpd_dmc.bin
 i915/xe3lpd_3002_dmc.bin
+# Panther Lake Bluetooth (PCIe/IML), ISH sensor hub and NPU firmware, from linux-firmware-20260622
+intel/ibt-00a0-0041-iml.sfi
+intel/ibt-00a0-0041-pci.ddc
+intel/ibt-00a0-0041-pci.sfi
+intel/ibt-00a0-01a1-iml.sfi
+intel/ibt-00a0-01a1-pci.ddc
+intel/ibt-00a0-01a1-pci.sfi
+intel/ibt-00a0-01a1-usb.ddc
+intel/ibt-00a0-01a1-usb.sfi
+intel/ibt-00a0-0291-iml.sfi
+intel/ibt-00a0-0291-pci.ddc
+intel/ibt-00a0-0291-pci.sfi
+intel/ibt-00a0-0291-usb.ddc
+intel/ibt-00a0-0291-usb.sfi
+intel/ibt-1190-0041-iml.sfi
+intel/ibt-1190-0041-pci.ddc
+intel/ibt-1190-0041-pci.sfi
+intel/ibt-1190-0041-usb.ddc
+intel/ibt-1190-0041-usb.sfi
+intel/ibt-1190-01a1-iml.sfi
+intel/ibt-1190-01a1-pci.ddc
+intel/ibt-1190-01a1-pci.sfi
+intel/ish/ish_ptl_39ceeaf8.bin
+intel/ish/ish_ptl_53c4ffad_75d6ebe2.bin
+intel/ish/ish_ptl_53c4ffad_bc3e29f7.bin
+intel/ish/ish_ptl.bin
+intel/vpu/vpu_50xx_v0.0.bin
+intel/vpu/vpu_50xx_v1.bin

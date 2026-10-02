@@ -60,6 +60,12 @@ INPUT="$1"
         # Intel SOF audio — .ri blobs and topology (.tplg) for CS42L43/SoundWire
         [[ "${line}" =~ ^intel/sof ]]         && echo "${line}" && continue
 
+        # Intel ISH (sensor hub) firmware, loaded by the host on Panther Lake
+        [[ "${line}" =~ ^intel/ish/ish_ptl ]] && echo "${line}" && continue
+
+        # Intel NPU (VPU 50xx = Panther Lake)
+        [[ "${line}" =~ ^intel/vpu/vpu_50xx ]] && echo "${line}" && continue
+
         # Intel DSP firmware (used by some SOF/ME subsystems on Xe platforms)
         [[ "${line}" =~ ^intel/dsp_fw ]]      && echo "${line}" && continue
 

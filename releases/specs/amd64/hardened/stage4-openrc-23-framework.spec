@@ -31,8 +31,8 @@ stage4/use:
 stage4/packages:
 	## --- Firmware ---
 	# linux-firmware: pruned via savedconfig to Panther Lake Xe3 GPU blobs
-	# (xe/ptl_*), BE211 Wi-Fi 7 (iwlwifi-bz-*), and Bluetooth (intel/ibt-0040,
-	# intel/ibt-0041).
+	# (xe/ptl_*, i915/xe3lpd DMC), BE211 Wi-Fi 7 (iwlwifi-sc/bz) and
+	# Bluetooth (intel/ibt-*), ISH (intel/ish/ish_ptl*) and NPU (vpu_50xx).
 	sys-kernel/linux-firmware
 	# sof-firmware: SOF audio firmware/topology is NOT part of linux-firmware;
 	# required for the CS42L43 codec via SoundWire (CONFIG_SND_SOC_SOF_PANTHERLAKE).
@@ -109,6 +109,14 @@ stage4/packages:
 	media-video/pipewire
 	media-video/wireplumber
 
+	## --- Bluetooth ---
+	# BE211 Bluetooth (btintel_pcie on Panther Lake)
+	net-wireless/bluez
+
+	## --- Video acceleration ---
+	# VA-API (iHD) for Xe3 hardware decode in firefox[hwaccel] and mpv
+	media-libs/libva-intel-media-driver
+
 	## --- Applications ---
 	# mpv is the lightweight video choice vs vlc
 	media-video/mpv
@@ -160,6 +168,8 @@ stage4/packages:
 	sys-power/power-profiles-daemon
 
 stage4/rcadd:
+	# elogind: seats, lid/suspend handling and XDG_RUNTIME_DIR for pipewire
+	elogind|boot
 	acpid|default
 	net.lo|default
 	netmount|default
@@ -168,11 +178,16 @@ stage4/rcadd:
 	syslog-ng|default
 	thermald|default
 	wpa_supplicant|default
+	dhcpcd|default
 	# dbus: system bus required by boltd, fprintd, and power-profiles-daemon
 	dbus|default
 	boltd|default
 	power-profiles-daemon|default
-	# Start pipewire via user session, not rc — see fsscript or ~/.xinitrc
+	bluetooth|default
+	# pipewire runs per user, not from rc: /etc/skel/.xinitrc (root_overlay)
+	# starts gentoo-pipewire-launcher before fluxbox.
+
+stage4/root_overlay: @REPO_DIR@/overlay/framework/
 
 boot/kernel: gentoo
 boot/kernel/gentoo/sources: gentoo-sources

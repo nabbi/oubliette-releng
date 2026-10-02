@@ -29,7 +29,9 @@ to only what the hardware requires:
 | Intel Xe3 iGPU | `xe/ptl_*` | Panther Lake GuC/HuC/GSC firmware (Arc B390) |
 | Intel Xe3 display | `i915/xe3lpd*_dmc.bin` | Display DMC (DC power states); `xe` loads it from `i915/` |
 | Intel WiFi | `iwlwifi-sc-*`, `iwlwifi-bz-*` | BE211 (Wi-Fi 7); kernel 7.2 iwlmld needs core `-c102`+ |
-| Intel Bluetooth | `intel/ibt-0040*`, `intel/ibt-0041*` | CNVi Bluetooth (paired with BE211) |
+| Intel Bluetooth | `intel/ibt-*` (incl. `-pci`/`-iml`) | CNVi Bluetooth (paired with BE211; PCIe via `btintel_pcie`) |
+| Intel ISH | `intel/ish/ish_ptl*` | Sensor hub firmware, loaded by the host on Panther Lake |
+| Intel NPU | `intel/vpu/vpu_50xx*` | Panther Lake NPU (`DRM_ACCEL_IVPU`) |
 | Intel DSP | `intel/dsp_fw*` | Legacy SST/ME subsystem firmware |
 
 SOF audio firmware/topology for the CS42L43 codec (SoundWire) is **not** part of
@@ -70,7 +72,8 @@ framework config migrated to gentoo-sources-7.2.8 with `make olddefconfig`, then
   `SYSFB_SIMPLEFB` keep a console on the GOP framebuffer until `xe` loads.
 - `PINCTRL_INTEL_PLATFORM`: Panther Lake GPIO. Touchpad/touchscreen IRQs depend on it.
 - `INTEL_IDLE`, `INT340X_THERMAL`, `INTEL_RAPL`, `INTEL_PMC_CORE`: idle states, thermal, power.
-- `IWLMLD` + `BT_HCIBTUSB`: BE211 Wi-Fi 7 (iwlmld op mode) and Bluetooth.
+- `IWLMLD` + `BT_INTEL_PCIE`: BE211 Wi-Fi 7 (iwlmld op mode) and Bluetooth, which is attached
+  over PCIe on Panther Lake (`0xE476`), not USB.
 - `HID_HAPTIC` + `HID_MULTITOUCH`, `I2C_HID_ACPI`, `INTEL_THC_HID`/`QUICKI2C`/`QUICKSPI`:
   haptic touchpad and in-cell touchscreen.
 - `INTEL_ISH_HID` + `HID_SENSOR_ALS`: sensor hub (ambient light).
@@ -126,3 +129,13 @@ driver. Added to `stage4/rcadd` as `power-profiles-daemon|default` (requires `db
 `sys-apps/fwupd` delivers BIOS/EC/retimer firmware updates via LVFS.
 `package.use/fwupd` enables `uefi` (UEFI ESRT capsule updates — the main path for
 Framework BIOS updates) and `nvme` (SSD firmware updates).
+
+## Services and session
+
+`stage4/rcadd` starts `elogind` (boot; seats, lid/suspend, `XDG_RUNTIME_DIR`), `dhcpcd`
+alongside `wpa_supplicant`, and `bluetooth` (`net-wireless/bluez`).
+`media-libs/libva-intel-media-driver` provides VA-API (iHD) for Xe3 hardware video decode.
+
+PipeWire runs per user rather than from rc. `overlay/framework/etc/skel/.xinitrc`
+(`stage4/root_overlay`) starts `gentoo-pipewire-launcher` and then `startfluxbox`, so new
+users get audio with `startx`.
