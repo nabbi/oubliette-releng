@@ -5045,3 +5045,22 @@ yamaha/yss225_registers.bin
 yamaha/ds1_dsp.fw
 yamaha/ds1e_ctrl.fw
 yamaha/ds1_ctrl.fw
+# Wi-Fi 7 / Panther Lake CNVi (BE2xx) firmware for iwlmld, from linux-firmware-20260622
+iwlwifi-bz-b0-fm-c0-100.ucode
+iwlwifi-bz-b0-fm-c0-101.ucode
+iwlwifi-bz-b0-fm-c0-c101.ucode
+iwlwifi-bz-b0-fm-c0-c102.ucode
+iwlwifi-bz-b0-fm-c0-c103.ucode
+iwlwifi-bz-b0-gf-a0-100.ucode
+iwlwifi-bz-b0-hr-b0-100.ucode
+iwlwifi-bz-b0-hr-b0-93.ucode
+iwlwifi-bz-b0-wh-b0-c102.ucode
+iwlwifi-bz-b0-wh-b0-c103.ucode
+iwlwifi-sc-a0-fm-c0-c101.ucode
+iwlwifi-sc-a0-fm-c0-c102.ucode
+iwlwifi-sc-a0-fm-c0-c103.ucode
+iwlwifi-sc-a0-gf-a0-100.ucode
+iwlwifi-sc-a0-wh-b0-101.ucode
+iwlwifi-sc-a0-wh-b0-c101.ucode
+iwlwifi-sc-a0-wh-b0-c102.ucode
+iwlwifi-sc-a0-wh-b0-c103.ucode

@@ -20,7 +20,7 @@ livecd/volid: Oubliette-@TIMESTAMP@
 boot/kernel: gentoo
 
 boot/kernel/gentoo/sources: gentoo-sources
-boot/kernel/gentoo/config: @REPO_DIR@/releases/kconfig/amd64/amd64-6.6.30.config
+boot/kernel/gentoo/config: @REPO_DIR@/releases/kconfig/amd64/amd64-6.18.52-admincd.config
 
 boot/kernel/gentoo/packages: --usepkg n net-wireless/broadcom-sta sys-fs/zfs
 
