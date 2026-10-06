@@ -16,7 +16,7 @@ sed -i 's/^#\ CONFIG_MLX4_CORE_GEN2\ is\ not\ set/CONFIG_MLX4_CORE_GEN2=m/' *.co
 | `amd64-7.2.8-framework.config` | `stage4-openrc-23-framework.spec` | previous framework config + `fragments/framework.config` |
 
 `fragments/admincd.config` is generic hardware compatibility only (GOP console via
-simpledrm, newer Intel platforms, Wi-Fi 7, USB4). It deliberately has no native GPU drivers:
+simpledrm, IOMMU interrupt remapping, newer Intel platforms, Wi-Fi 7, USB4). It deliberately has no native GPU drivers:
 the ISO's pruned linux-firmware has no GPU blobs, and i915/xe/amdgpu evict the firmware
 framebuffer before failing on missing firmware, leaving a blank screen. Anything
 machine-specific goes in that machine's fragment and only its stage4.
