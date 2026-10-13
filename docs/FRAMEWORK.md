@@ -34,7 +34,7 @@ to only what the hardware requires:
 | Intel NPU | `intel/vpu/vpu_50xx*` | Panther Lake NPU (`DRM_ACCEL_IVPU`) |
 | Intel DSP | `intel/dsp_fw*` | Legacy SST/ME subsystem firmware |
 
-SOF audio firmware/topology for the CS42L43 codec (SoundWire) is **not** part of
+SOF audio firmware/topology (`sof-hda-generic` for the ALC285) is **not** part of
 `linux-firmware` — it ships separately as `sys-firmware/sof-firmware` (see `stage4/packages`
 in the spec). The regulatory database (`regulatory.db`) similarly comes from
 `net-wireless/wireless-regdb`, not `linux-firmware`, on this profile.
@@ -60,8 +60,9 @@ installed, `#`-prefixed lines are excluded.
 
 Framework lists **6.19 as the minimum kernel, 7.0+ recommended**
 (<https://frame.work/laptop13pro?tab=linux>). Stable `gentoo-sources` is 6.18, so
-`package.accept_keywords/framework` keywords `=sys-kernel/gentoo-sources-7.2*`. That entry is
-framework-only; the admincd stays on the stable kernel.
+`package.accept_keywords/framework` keywords `=sys-kernel/gentoo-sources-7.2*`. The admincd
+keywords the same series in its own confdir (`isos/package.accept_keywords/gentoo-sources`) but
+keeps its own generic config.
 
 The spec references `releases/kconfig/amd64/amd64-7.2.8-framework.config`: the previous
 framework config migrated to gentoo-sources-7.2.8 with `make olddefconfig`, then
@@ -78,8 +79,11 @@ framework config migrated to gentoo-sources-7.2.8 with `make olddefconfig`, then
   haptic touchpad and in-cell touchscreen.
 - `INTEL_ISH_HID` + `HID_SENSOR_ALS`: sensor hub (ambient light).
 - `SND_SOC_SOF_PANTHERLAKE`, `SND_SOC_SOF_HDA_LINK`/`HDA_AUDIO_CODEC`,
-  `SND_SOC_INTEL_SOUNDWIRE_SOF_MACH` (selects the SoundWire codecs incl. CS42L43/RT7xx):
-  internal audio and HDMI/DP audio.
+  `SND_SOC_INTEL_SKL_HDA_DSP_GENERIC_MACH`: internal audio and HDMI/DP audio. On real hardware
+  the analog codec is a Realtek ALC285 on the HDA link (internal mic through the codec), so
+  SOF uses the HDA generic machine driver. If SOF misbehaves, `snd_intel_dspcfg.dsp_driver=1`
+  falls back to plain `snd_hda_intel`, which works (verified on the admincd) and loses
+  nothing without DMICs. `SND_SOC_INTEL_SOUNDWIRE_SOF_MACH` stays for other PTL codecs.
 - `USB4`, `INTEL_IOMMU` (default on, Thunderbolt DMA protection), `TYPEC_UCSI`/`UCSI_ACPI`.
 - `USB_VIDEO_CLASS`: webcam. `DRM_ACCEL_IVPU`: NPU.
 - `CROS_EC_LPC` and friends: the `cros_ec_lpc` driver matches the `FRMWC004` ACPI device
