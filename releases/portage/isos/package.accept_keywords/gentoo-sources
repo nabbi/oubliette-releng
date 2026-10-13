@@ -1,0 +1,3 @@
+# gentoo-sources 7.2: Panther Lake and other new laptops need >= 6.19; stable is 6.18.
+# Matches releases/kconfig/amd64/amd64-7.2.8-admincd.config.
+=sys-kernel/gentoo-sources-7.2* ~amd64
