@@ -22,13 +22,17 @@
 #
 # The input must be the VANILLA savedconfig (all firmware entries uncommented).
 # Obtain one from an installed package:
-#   find /lib/firmware -type f | sed 's|/lib/firmware/||' | sort
+#   find /lib/firmware ! -type d | sed 's|/lib/firmware/||' | sort
+#
+# Kept symlinks are resolved against FW_ROOT (default /lib/firmware), which must
+# hold the same linux-firmware version unpruned; see tools/fw-savedconfig-links.sh.
 
 set -euo pipefail
 
 [[ $# -eq 1 ]] || { echo "Usage: $0 <vanilla-savedconfig>" >&2; exit 1; }
 INPUT="$1"
 [[ -f "${INPUT}" ]] || { echo "File not found: ${INPUT}" >&2; exit 1; }
+LINKS="$(git rev-parse --show-toplevel)/tools/fw-savedconfig-links.sh"
 
 {
     echo "# $(git config user.name) <$(git config user.email)> ($(date +%Y-%m-%d))"
@@ -51,8 +55,10 @@ INPUT="$1"
         # ...except the display DMC, which xe loads from i915/ (xe3lpd = PTL)
         [[ "${line}" =~ ^i915/xe3lpd ]]       && echo "${line}" && continue
 
-        # Intel WiFi — BE211 (Wi-Fi 7) uses iwlwifi-bz-* firmware
+        # Intel WiFi — BE211 (Wi-Fi 7) uses iwlwifi-sc-* firmware. The blobs
+        # live in intel/iwlwifi/, the top-level names are compat symlinks.
         [[ "${line}" =~ ^iwlwifi ]]           && echo "${line}" && continue
+        [[ "${line}" =~ ^intel/iwlwifi/ ]]    && echo "${line}" && continue
 
         # Intel Bluetooth (ibt-* covers all modern CNVi BT)
         [[ "${line}" =~ ^intel/ibt ]]         && echo "${line}" && continue
@@ -75,4 +81,4 @@ INPUT="$1"
         # ── Exclude everything else (comment out = do not install) ────────────
         echo "#${line}"
     done
-}
+} | "${LINKS}"

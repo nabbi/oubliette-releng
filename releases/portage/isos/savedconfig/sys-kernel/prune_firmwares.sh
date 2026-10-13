@@ -10,6 +10,12 @@
 # Example usage:
 #   ./prune_firmwares.sh /etc/portage/savedconfig/sys-kernel/linux-firmware-20230515
 #   git add . && git commit -sS
+#
+# Kept symlinks are resolved against FW_ROOT (default /lib/firmware), which must
+# hold the same linux-firmware version unpruned; see tools/fw-savedconfig-links.sh.
+
+set -eo pipefail
+LINKS="$(git rev-parse --show-toplevel)/tools/fw-savedconfig-links.sh"
 
 echo "# $(git config user.name) <$(git config user.email)> ($(date +%Y-%m-%d))" > linux-firmware
 echo "# Last updated for $(basename ${1})" >> linux-firmware
@@ -54,4 +60,4 @@ sed 	-e's/^a300/#a300/' \
 	-e 's/^tlg/#tlg/' \
 	-e 's/^usbdux/#usbdux/' \
 	-e 's/^v4l-/#v4l-/' \
-	${1} >> linux-firmware
+	${1} | "${LINKS}" --respect-pruned >> linux-firmware
