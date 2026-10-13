@@ -6,7 +6,7 @@ These are my unofficial Catalyst build specs, modified from [Gentoo's Releng](ht
 
 * kconfig: resolves usb keyboard initialization issue on one of my systems
 * livecd: auto-start sshd using my public key for auth
-* livecd: auto-join wifi when `overlay/admincd/etc/wpa_supplicant/wpa_supplicant.conf` exists locally (gitignored, never committed)
+* livecd: auto-join wifi when `overlay/admincd/etc/wpa_supplicant/wpa_supplicant.conf` exists locally (gitignored, never committed); start from `wpa_supplicant.example.conf` next to it
 * livecd: includes more packages - mostly network focused
 * distcc support
 * incorporates Oubliette [overlay](https://github.com/nabbi/oubliette-overlay) and [patches](https://github.com/nabbi/oubliette-patches)
