@@ -15,4 +15,25 @@ if [ -f /root/.ssh/authorized_keys ]; then
     chmod 0600 /root/.ssh/authorized_keys
 fi
 
+# wireless: overlay/admincd/etc/wpa_supplicant/wpa_supplicant.conf is gitignored
+# and only ships when present in the local overlay
+if [ -f /etc/wpa_supplicant/wpa_supplicant.conf ]; then
+	chown root:root /etc/wpa_supplicant/wpa_supplicant.conf
+	chmod 0600 /etc/wpa_supplicant/wpa_supplicant.conf
+
+	# -M waits for a matching interface; iwlwifi registers wlan only after its
+	# async firmware load, which can land after wpa_supplicant starts
+	echo 'wpa_supplicant_args="-M -iwl*"' >> /etc/conf.d/wpa_supplicant
+	rc-update add wpa_supplicant default
+
+	# autoconfig starts dhcpcd only if a NIC exists when it runs, which a
+	# wireless-only machine may not have yet; manager mode picks wlan up later
+	cat > /etc/local.d/wireless-dhcp.start <<-'EOT'
+	#!/bin/sh
+	pgrep -x dhcpcd >/dev/null || dhcpcd -b -h "$(hostname)"
+	EOT
+	chmod 0755 /etc/local.d/wireless-dhcp.start
+	rc-update add local default
+fi
+
 exit 0
