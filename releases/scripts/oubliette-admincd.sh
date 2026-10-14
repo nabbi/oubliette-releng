@@ -6,7 +6,8 @@ set -eu
 chown root:root /root
 chmod 0700 /root
 
-# ssh daemon will refuse key authenticate if unsafe
+# ssh: overlay/admincd/root/.ssh/authorized_keys is gitignored and only ships
+# when present in the local overlay; sshd refuses keys with unsafe perms
 if [ -f /root/.ssh/authorized_keys ]; then
 	chown root:root /root/.ssh
 	chmod 0700 /root/.ssh

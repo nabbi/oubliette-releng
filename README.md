@@ -5,7 +5,7 @@ These are my unofficial Catalyst build specs, modified from [Gentoo's Releng](ht
 ## AMD64 Admin ISO
 
 * kconfig: resolves usb keyboard initialization issue on one of my systems
-* livecd: auto-start sshd using my public key for auth
+* livecd: auto-start sshd with key auth from `overlay/admincd/root/.ssh/authorized_keys` when it exists locally (gitignored); start from `authorized_keys.example` next to it
 * livecd: auto-join wifi when `overlay/admincd/etc/wpa_supplicant/wpa_supplicant.conf` exists locally (gitignored, never committed); start from `wpa_supplicant.example.conf` next to it
 * livecd: includes more packages - mostly network focused
 * distcc support

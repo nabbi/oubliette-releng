@@ -1,3 +1,4 @@
 config/catalyst.conf
 *.swp
 overlay/admincd/etc/wpa_supplicant/wpa_supplicant.conf
+overlay/admincd/root/.ssh/authorized_keys
