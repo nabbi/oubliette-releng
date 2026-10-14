@@ -1,5 +1,6 @@
 # Last updated for linux-firmware-20250808 (releases/portage/isos savedconfig),
 # plus xe/ptl_gsc_1.bin from linux-firmware-20260410
+# plus iwlwifi -c106 blobs from linux-firmware-20260810
 # Framework 13 Pro: Panther Lake Xe3 iGPU, BE211 WiFi, BT, DSP fw — all others excluded
 # (SOF audio firmware comes from sys-firmware/sof-firmware, not linux-firmware)
 #
@@ -3160,19 +3161,23 @@ iwlwifi-bz-b0-fm-c0-101.ucode
 iwlwifi-bz-b0-fm-c0-c101.ucode
 iwlwifi-bz-b0-fm-c0-c102.ucode
 iwlwifi-bz-b0-fm-c0-c103.ucode
+iwlwifi-bz-b0-fm-c0-c106.ucode
 iwlwifi-bz-b0-gf-a0-100.ucode
 iwlwifi-bz-b0-hr-b0-100.ucode
 iwlwifi-bz-b0-hr-b0-93.ucode
 iwlwifi-bz-b0-wh-b0-c102.ucode
 iwlwifi-bz-b0-wh-b0-c103.ucode
+iwlwifi-bz-b0-wh-b0-c106.ucode
 iwlwifi-sc-a0-fm-c0-c101.ucode
 iwlwifi-sc-a0-fm-c0-c102.ucode
 iwlwifi-sc-a0-fm-c0-c103.ucode
+iwlwifi-sc-a0-fm-c0-c106.ucode
 iwlwifi-sc-a0-gf-a0-100.ucode
 iwlwifi-sc-a0-wh-b0-101.ucode
 iwlwifi-sc-a0-wh-b0-c101.ucode
 iwlwifi-sc-a0-wh-b0-c102.ucode
 iwlwifi-sc-a0-wh-b0-c103.ucode
+iwlwifi-sc-a0-wh-b0-c106.ucode
 # Panther Lake display DMC (loaded by xe from i915/), from linux-firmware-20260622
 i915/xe3lpd_dmc.bin
 i915/xe3lpd_3002_dmc.bin
@@ -3252,6 +3257,7 @@ intel/iwlwifi/iwlwifi-bz-b0-fm-c0-98.ucode
 intel/iwlwifi/iwlwifi-bz-b0-fm-c0-c101.ucode
 intel/iwlwifi/iwlwifi-bz-b0-fm-c0-c102.ucode
 intel/iwlwifi/iwlwifi-bz-b0-fm-c0-c103.ucode
+intel/iwlwifi/iwlwifi-bz-b0-fm-c0-c106.ucode
 intel/iwlwifi/iwlwifi-bz-b0-fm-c0.pnvm
 intel/iwlwifi/iwlwifi-bz-b0-gf-a0-100.ucode
 intel/iwlwifi/iwlwifi-bz-b0-gf-a0-92.ucode
@@ -3267,6 +3273,7 @@ intel/iwlwifi/iwlwifi-bz-b0-hr-b0-98.ucode
 intel/iwlwifi/iwlwifi-bz-b0-hr-b0.pnvm
 intel/iwlwifi/iwlwifi-bz-b0-wh-b0-c102.ucode
 intel/iwlwifi/iwlwifi-bz-b0-wh-b0-c103.ucode
+intel/iwlwifi/iwlwifi-bz-b0-wh-b0-c106.ucode
 intel/iwlwifi/iwlwifi-cc-a0-50.ucode
 intel/iwlwifi/iwlwifi-cc-a0-59.ucode
 intel/iwlwifi/iwlwifi-cc-a0-66.ucode
@@ -3339,11 +3346,13 @@ intel/iwlwifi/iwlwifi-QuZ-a0-jf-b0-77.ucode
 intel/iwlwifi/iwlwifi-sc-a0-fm-c0-c101.ucode
 intel/iwlwifi/iwlwifi-sc-a0-fm-c0-c102.ucode
 intel/iwlwifi/iwlwifi-sc-a0-fm-c0-c103.ucode
+intel/iwlwifi/iwlwifi-sc-a0-fm-c0-c106.ucode
 intel/iwlwifi/iwlwifi-sc-a0-gf-a0-100.ucode
 intel/iwlwifi/iwlwifi-sc-a0-wh-b0-101.ucode
 intel/iwlwifi/iwlwifi-sc-a0-wh-b0-c101.ucode
 intel/iwlwifi/iwlwifi-sc-a0-wh-b0-c102.ucode
 intel/iwlwifi/iwlwifi-sc-a0-wh-b0-c103.ucode
+intel/iwlwifi/iwlwifi-sc-a0-wh-b0-c106.ucode
 intel/iwlwifi/iwlwifi-so-a0-gf4-a0-72.ucode
 intel/iwlwifi/iwlwifi-so-a0-gf4-a0-73.ucode
 intel/iwlwifi/iwlwifi-so-a0-gf4-a0-74.ucode

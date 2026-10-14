@@ -1,5 +1,6 @@
 # Ben Kohler <bkohler@gentoo.org> (2025-11-10)
 # Last updated for linux-firmware-20250808
+# plus iwlwifi -c106 blobs from linux-firmware-20260810 (kernel 7.2 iwlwifi needs core >= c102)
 # Remove files that shall not be installed from this list.
 3com/typhoon.bin
 INT8866RCA2.bin
@@ -3070,6 +3071,7 @@ iwlwifi-gl-c0-fm-c0-94.ucode
 iwlwifi-gl-c0-fm-c0-96.ucode
 iwlwifi-gl-c0-fm-c0-97.ucode
 iwlwifi-gl-c0-fm-c0-98.ucode
+iwlwifi-gl-c0-fm-c0-c106.ucode
 iwlwifi-gl-c0-fm-c0.pnvm
 iwlwifi-ma-b0-gf-a0-83.ucode
 iwlwifi-ma-b0-gf-a0-86.ucode
@@ -5051,19 +5053,23 @@ iwlwifi-bz-b0-fm-c0-101.ucode
 iwlwifi-bz-b0-fm-c0-c101.ucode
 iwlwifi-bz-b0-fm-c0-c102.ucode
 iwlwifi-bz-b0-fm-c0-c103.ucode
+iwlwifi-bz-b0-fm-c0-c106.ucode
 iwlwifi-bz-b0-gf-a0-100.ucode
 iwlwifi-bz-b0-hr-b0-100.ucode
 iwlwifi-bz-b0-hr-b0-93.ucode
 iwlwifi-bz-b0-wh-b0-c102.ucode
 iwlwifi-bz-b0-wh-b0-c103.ucode
+iwlwifi-bz-b0-wh-b0-c106.ucode
 iwlwifi-sc-a0-fm-c0-c101.ucode
 iwlwifi-sc-a0-fm-c0-c102.ucode
 iwlwifi-sc-a0-fm-c0-c103.ucode
+iwlwifi-sc-a0-fm-c0-c106.ucode
 iwlwifi-sc-a0-gf-a0-100.ucode
 iwlwifi-sc-a0-wh-b0-101.ucode
 iwlwifi-sc-a0-wh-b0-c101.ucode
 iwlwifi-sc-a0-wh-b0-c102.ucode
 iwlwifi-sc-a0-wh-b0-c103.ucode
+iwlwifi-sc-a0-wh-b0-c106.ucode
 
 # linux-firmware >= 2026 moved these blobs into vendor subdirectories and left the
 # names above as compat symlinks. copy-firmware.sh only installs listed paths and
@@ -5108,6 +5114,7 @@ intel/iwlwifi/iwlwifi-bz-b0-fm-c0-98.ucode
 intel/iwlwifi/iwlwifi-bz-b0-fm-c0-c101.ucode
 intel/iwlwifi/iwlwifi-bz-b0-fm-c0-c102.ucode
 intel/iwlwifi/iwlwifi-bz-b0-fm-c0-c103.ucode
+intel/iwlwifi/iwlwifi-bz-b0-fm-c0-c106.ucode
 intel/iwlwifi/iwlwifi-bz-b0-fm-c0.pnvm
 intel/iwlwifi/iwlwifi-bz-b0-gf-a0-100.ucode
 intel/iwlwifi/iwlwifi-bz-b0-gf-a0-92.ucode
@@ -5123,6 +5130,7 @@ intel/iwlwifi/iwlwifi-bz-b0-hr-b0-98.ucode
 intel/iwlwifi/iwlwifi-bz-b0-hr-b0.pnvm
 intel/iwlwifi/iwlwifi-bz-b0-wh-b0-c102.ucode
 intel/iwlwifi/iwlwifi-bz-b0-wh-b0-c103.ucode
+intel/iwlwifi/iwlwifi-bz-b0-wh-b0-c106.ucode
 intel/iwlwifi/iwlwifi-cc-a0-50.ucode
 intel/iwlwifi/iwlwifi-cc-a0-59.ucode
 intel/iwlwifi/iwlwifi-cc-a0-66.ucode
@@ -5138,6 +5146,7 @@ intel/iwlwifi/iwlwifi-gl-c0-fm-c0-94.ucode
 intel/iwlwifi/iwlwifi-gl-c0-fm-c0-96.ucode
 intel/iwlwifi/iwlwifi-gl-c0-fm-c0-97.ucode
 intel/iwlwifi/iwlwifi-gl-c0-fm-c0-98.ucode
+intel/iwlwifi/iwlwifi-gl-c0-fm-c0-c106.ucode
 intel/iwlwifi/iwlwifi-gl-c0-fm-c0.pnvm
 intel/iwlwifi/iwlwifi-ma-b0-gf4-a0-83.ucode
 intel/iwlwifi/iwlwifi-ma-b0-gf4-a0-86.ucode
@@ -5195,11 +5204,13 @@ intel/iwlwifi/iwlwifi-QuZ-a0-jf-b0-77.ucode
 intel/iwlwifi/iwlwifi-sc-a0-fm-c0-c101.ucode
 intel/iwlwifi/iwlwifi-sc-a0-fm-c0-c102.ucode
 intel/iwlwifi/iwlwifi-sc-a0-fm-c0-c103.ucode
+intel/iwlwifi/iwlwifi-sc-a0-fm-c0-c106.ucode
 intel/iwlwifi/iwlwifi-sc-a0-gf-a0-100.ucode
 intel/iwlwifi/iwlwifi-sc-a0-wh-b0-101.ucode
 intel/iwlwifi/iwlwifi-sc-a0-wh-b0-c101.ucode
 intel/iwlwifi/iwlwifi-sc-a0-wh-b0-c102.ucode
 intel/iwlwifi/iwlwifi-sc-a0-wh-b0-c103.ucode
+intel/iwlwifi/iwlwifi-sc-a0-wh-b0-c106.ucode
 intel/iwlwifi/iwlwifi-so-a0-gf4-a0-72.ucode
 intel/iwlwifi/iwlwifi-so-a0-gf4-a0-73.ucode
 intel/iwlwifi/iwlwifi-so-a0-gf4-a0-74.ucode

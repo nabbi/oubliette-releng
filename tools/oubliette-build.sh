@@ -238,6 +238,11 @@ full_build() {
     log "Purge previously built live packages"
     find "${STOREDIR}/packages/" -name "*-9999*" -type f -print -delete 2>/dev/null || true
 
+    # A savedconfig edit does not change linux-firmware's version or USE, so
+    # pkgcache would reinstall a binpkg pruned by the previous savedconfig
+    log "Purge savedconfig-pruned linux-firmware packages"
+    find "${STOREDIR}/packages/" -path "*/sys-kernel/linux-firmware/*" -type f -print -delete 2>/dev/null || true
+
     reindex_binpkgs
 
     # Keep catalyst tmp/autoresume state of every spec, so a failure can be
