@@ -6,6 +6,12 @@
 #
 # Some firmware types we prune include GPU firmwares, DVB firmwares, and unusually
 # large firmwares for enterprise 10G+ NICs.
+#
+# qcom/ (Snapdragon SoC GPU/DSP/modem blobs, ~480 MiB) is pruned to keep the amd64
+# ISO small. This savedconfig is shared with releases/specs/arm64/stage4-minimal.spec,
+# which is not tested here: Qualcomm arm64 boards built from it get no qcom/
+# firmware. Drop the qcom/ rule (or give arm64 its own confdir) if that matters.
+# Qualcomm Wi-Fi/BT on x86 lives in ath10k/ ath11k/ ath12k/ qca/ and is kept.
 
 # Example usage:
 #   ./prune_firmwares.sh /etc/portage/savedconfig/sys-kernel/linux-firmware-20230515
@@ -60,5 +66,6 @@ sed 	-e's/^a300/#a300/' \
 	-e 's/^tlg/#tlg/' \
 	-e 's/^usbdux/#usbdux/' \
 	-e 's/^v4l-/#v4l-/' \
+	-e 's%^qcom/%#qcom/%' \
 	-e 's%^xe/%#xe/%' \
 	${1} | "${LINKS}" --respect-pruned >> linux-firmware
