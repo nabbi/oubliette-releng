@@ -1,0 +1,3 @@
+# savedconfig: install only the blobs listed in savedconfig/sys-kernel/linux-firmware
+# (Panther Lake iGPU/NPU/ISH, BE211 Wi-Fi + BT, Ethernet card) instead of all of it
+sys-kernel/linux-firmware savedconfig

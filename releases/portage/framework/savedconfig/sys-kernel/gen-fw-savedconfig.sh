@@ -75,6 +75,9 @@ LINKS="$(git rev-parse --show-toplevel)/tools/fw-savedconfig-links.sh"
         # Intel DSP firmware (used by some SOF/ME subsystems on Xe platforms)
         [[ "${line}" =~ ^intel/dsp_fw ]]      && echo "${line}" && continue
 
+        # Ethernet Expansion Card (RTL8156B) and RTL8153 docks: r8152 PHY patches
+        [[ "${line}" =~ ^rtl_nic/rtl815[36] ]] && echo "${line}" && continue
+
         # Wireless regulatory database — required by all WiFi drivers
         [[ "${line}" =~ ^regulatory ]]        && echo "${line}" && continue
 

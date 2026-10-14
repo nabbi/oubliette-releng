@@ -60,4 +60,5 @@ sed 	-e's/^a300/#a300/' \
 	-e 's/^tlg/#tlg/' \
 	-e 's/^usbdux/#usbdux/' \
 	-e 's/^v4l-/#v4l-/' \
+	-e 's%^xe/%#xe/%' \
 	${1} | "${LINKS}" --respect-pruned >> linux-firmware
