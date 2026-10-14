@@ -1,4 +1,4 @@
 # uefi: required for UEFI ESRT capsule updates (BIOS/EC firmware delivered
-# via LVFS for Framework hardware)
-# nvme: NVMe SSD firmware updates
-sys-apps/fwupd uefi nvme
+# via LVFS for Framework hardware); the NVMe plugin is always built
+# policykit: lets wheel users run fwupdmgr without root
+sys-apps/fwupd uefi policykit

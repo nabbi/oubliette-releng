@@ -1,7 +1,4 @@
-# alsa: ALSA compatibility layer (many apps still use it via pipewire-alsa)
-# jack: JACK compatibility for pro-audio apps (optional, adds minimal overhead)
+# pipewire-alsa: route ALSA-only apps through pipewire
 # sound-server: expose pipewire as a sound server (PulseAudio replacement)
-media-video/pipewire alsa sound-server
-
-# wireplumber needs pipewire built with dbus
-media-video/wireplumber dbus
+# bluetooth: A2DP/HFP audio over the BE211's Bluetooth
+media-video/pipewire pipewire-alsa sound-server bluetooth

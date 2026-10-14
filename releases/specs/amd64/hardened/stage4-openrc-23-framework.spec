@@ -30,12 +30,13 @@ stage4/use:
 
 stage4/packages:
 	## --- Firmware ---
-	# linux-firmware: pruned via savedconfig to Panther Lake Xe3 GPU blobs
-	# (xe/ptl_*, i915/xe3lpd DMC), BE211 Wi-Fi 7 (iwlwifi-sc/bz) and
-	# Bluetooth (intel/ibt-*), ISH (intel/ish/ish_ptl*) and NPU (vpu_50xx).
+	# linux-firmware: pruned via savedconfig (package.use/linux-firmware) to
+	# Panther Lake Xe3 GPU blobs (xe/ptl_*, i915/xe3lpd DMC), BE211 Wi-Fi 7
+	# (iwlwifi-sc/bz) and Bluetooth (intel/ibt-*), ISH (intel/ish/ish_ptl*),
+	# NPU (vpu_50xx) and the Ethernet Expansion Card (rtl_nic/rtl8156*).
 	sys-kernel/linux-firmware
 	# sof-firmware: SOF audio firmware/topology is NOT part of linux-firmware;
-	# required for the CS42L43 codec via SoundWire (CONFIG_SND_SOC_SOF_PANTHERLAKE).
+	# required for the ALC285 on the HDA link (CONFIG_SND_SOC_SOF_PANTHERLAKE).
 	sys-firmware/sof-firmware
 	# wireless-regdb: regulatory.db for cfg80211 — linux-firmware does not ship
 	# this on this profile.
@@ -47,7 +48,6 @@ stage4/packages:
 	sys-apps/iproute2
 	sys-apps/dmidecode
 	sys-apps/ethtool
-	sys-power/acpid
 	sys-power/thermald
 	net-misc/dhcpcd
 	net-wireless/wpa_supplicant
@@ -69,6 +69,12 @@ stage4/packages:
 	dev-vcs/git
 	dev-vcs/git-lfs
 	sys-process/cronie
+	# pambase: the stage3 build lacks USE=elogind and stage4 doesn't merge
+	# --deep, so name it here or logins get no elogind session/XDG_RUNTIME_DIR
+	sys-auth/pambase
+	# host firewall (/etc/nftables.rules) and zram swap (/etc/conf.d/zram-init)
+	net-firewall/nftables
+	sys-block/zram-init
 	dev-debug/strace
 
 	## --- X.org server (minimal driver set) ---
@@ -92,6 +98,8 @@ stage4/packages:
 	x11-misc/dunst
 	x11-misc/xautolock
 	x11-misc/alock
+	# xss-lock: lock with alock when elogind suspends on lid close
+	x11-misc/xss-lock
 	media-gfx/feh
 
 	## --- Terminal ---
@@ -116,6 +124,8 @@ stage4/packages:
 	## --- Video acceleration ---
 	# VA-API (iHD) for Xe3 hardware decode in firefox[hwaccel] and mpv
 	media-libs/libva-intel-media-driver
+	# intel_gpu_top and friends for the Xe3 iGPU
+	x11-apps/igt-gpu-tools
 
 	## --- Applications ---
 	# mpv is the lightweight video choice vs vlc
@@ -159,8 +169,8 @@ stage4/packages:
 	# versions. Talks to the cros_ec_lpc kernel driver (CONFIG_CROS_EC*).
 	app-laptop/framework_tool
 	app-laptop/framework-tool-tui
-	# fwupd: BIOS/EC/retimer firmware updates via LVFS (uefi USE for ESRT
-	# capsule updates, nvme USE for SSD firmware updates).
+	# fwupd: BIOS/EC/retimer and NVMe firmware updates via LVFS (uefi USE for
+	# ESRT capsule updates, policykit so wheel users can run fwupdmgr).
 	sys-apps/fwupd
 	# power-profiles-daemon: performance/balanced/power-saver switching via
 	# /sys/firmware/acpi/platform_profile (backed by CROS_EC on this
@@ -170,7 +180,9 @@ stage4/packages:
 stage4/rcadd:
 	# elogind: seats, lid/suspend handling and XDG_RUNTIME_DIR for pipewire
 	elogind|boot
-	acpid|default
+	zram-init|boot
+	nftables|default
+	ntpd|default
 	net.lo|default
 	netmount|default
 	sshd|default
@@ -188,6 +200,7 @@ stage4/rcadd:
 	# starts gentoo-pipewire-launcher before fluxbox.
 
 stage4/root_overlay: @REPO_DIR@/overlay/framework/
+stage4/fsscript: @REPO_DIR@/releases/scripts/oubliette-framework.sh
 
 boot/kernel: gentoo
 boot/kernel/gentoo/sources: gentoo-sources

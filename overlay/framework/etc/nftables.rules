@@ -1,0 +1,28 @@
+#!/sbin/nft -f
+# Laptop host firewall: drop unsolicited inbound, allow ssh, DHCPv6 and ICMP.
+# Apply changes with: rc-service nftables reload
+flush ruleset
+
+table inet filter {
+	chain input {
+		type filter hook input priority filter; policy drop;
+
+		ct state established,related accept
+		ct state invalid drop
+		iif lo accept
+
+		meta l4proto icmp accept
+		meta l4proto ipv6-icmp accept
+		udp dport dhcpv6-client ip6 saddr fe80::/10 accept
+
+		tcp dport ssh accept
+	}
+
+	chain forward {
+		type filter hook forward priority filter; policy drop;
+	}
+
+	chain output {
+		type filter hook output priority filter; policy accept;
+	}
+}

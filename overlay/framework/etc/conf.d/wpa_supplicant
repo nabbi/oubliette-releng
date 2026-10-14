@@ -1,0 +1,5 @@
+# conf.d file for wpa_supplicant
+
+# -M waits for a matching interface: iwlwifi registers wlan only after its
+# async firmware load, which can land after wpa_supplicant starts
+wpa_supplicant_args="-M -iwl*"

@@ -86,7 +86,9 @@ framework config migrated to gentoo-sources-7.2.8 with `make olddefconfig`, then
   over PCIe on Panther Lake (`0xE476`), not USB.
 - `HID_HAPTIC` + `HID_MULTITOUCH`, `I2C_HID_ACPI`, `INTEL_THC_HID`/`QUICKI2C`/`QUICKSPI`:
   haptic touchpad and in-cell touchscreen.
-- `INTEL_ISH_HID` + `HID_SENSOR_ALS`: sensor hub (ambient light).
+- `INTEL_ISH_HID` + `HID_SENSOR_ALS`: sensor hub (ambient light). The readings are in
+  `/sys/bus/iio`; there is no auto-brightness daemon, as `iio-sensor-proxy` is only in GURU
+  and nothing under fluxbox would consume it.
 - `SND_SOC_SOF_PANTHERLAKE`, `SND_SOC_SOF_HDA_LINK`/`HDA_AUDIO_CODEC`,
   `SND_SOC_INTEL_SKL_HDA_DSP_GENERIC_MACH`: internal audio and HDMI/DP audio. On real hardware
   the analog codec is a Realtek ALC285 on the HDA link (internal mic through the codec), so
@@ -141,14 +143,30 @@ driver. Added to `stage4/rcadd` as `power-profiles-daemon|default` (requires `db
 
 `sys-apps/fwupd` delivers BIOS/EC/retimer firmware updates via LVFS.
 `package.use/fwupd` enables `uefi` (UEFI ESRT capsule updates — the main path for
-Framework BIOS updates) and `nvme` (SSD firmware updates).
+Framework BIOS updates) and `policykit` (wheel users can run `fwupdmgr`). The NVMe plugin is
+always built.
 
 ## Services and session
 
-`stage4/rcadd` starts `elogind` (boot; seats, lid/suspend, `XDG_RUNTIME_DIR`), `dhcpcd`
-alongside `wpa_supplicant`, and `bluetooth` (`net-wireless/bluez`).
+`stage4/rcadd` starts `elogind` (boot; seats, lid/suspend, power button, `XDG_RUNTIME_DIR`),
+`zram-init` (boot; zstd swap of a quarter of RAM), `nftables` (`/etc/nftables.rules`: inbound
+dropped except ssh, ICMP and DHCPv6), `ntpd` (openntpd), `dhcpcd` alongside `wpa_supplicant`,
+and `bluetooth` (`net-wireless/bluez`). acpid is not installed; elogind handles the lid and
+power button.
+
+`wpa_supplicant` runs with `-M -iwl*` (`/etc/conf.d/wpa_supplicant`), so it waits for the
+iwlwifi interface that appears only after the async firmware load. Add networks with
+`wpa_passphrase` or `wpa_cli`; `releases/scripts/oubliette-framework.sh` (`stage4/fsscript`)
+keeps `/etc/wpa_supplicant/wpa_supplicant.conf` at 0600 and resets the overlay's ownership.
+A weekly cron job runs `fstrim --all`.
+
+`sys-auth/pambase` is in `stage4/packages` so it is rebuilt with `USE=elogind`: catalyst's
+stage4 merge is not `--deep`, and the stage3's pambase would leave logins without an elogind
+session (no seat, no `XDG_RUNTIME_DIR`, no rootless Xorg or PipeWire).
 `media-libs/libva-intel-media-driver` provides VA-API (iHD) for Xe3 hardware video decode.
 
 PipeWire runs per user rather than from rc. `overlay/framework/etc/skel/.xinitrc`
-(`stage4/root_overlay`) starts `gentoo-pipewire-launcher` and then `startfluxbox`, so new
-users get audio with `startx`.
+(`stage4/root_overlay`) re-execs itself under `dbus-run-session` (`startx` skips
+`xinitrc.d`, where the session bus would otherwise start), then starts
+`gentoo-pipewire-launcher`, `xss-lock -- alock` (locks before suspend) and `startfluxbox`, so new
+users get audio and a session bus with `startx`.

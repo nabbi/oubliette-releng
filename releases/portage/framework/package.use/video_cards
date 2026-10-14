@@ -2,3 +2,6 @@
 # ships the xe DRM driver, so build Intel userspace drivers only instead of the
 # arch/amd64 default (amdgpu fbdev intel nouveau radeon radeonsi vesa)
 */* VIDEO_CARDS: -* intel
+
+# vulkan: anv for the Xe3 iGPU
+media-libs/mesa vulkan
