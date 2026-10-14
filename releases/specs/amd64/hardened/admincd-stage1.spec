@@ -59,6 +59,7 @@ livecd/packages:
 	app-emacs/ebuild-mode
 	app-emulation/cloud-init
 	app-misc/colordiff
+	app-misc/jq
 	app-misc/livecd-tools
 	app-misc/mc
 	app-misc/pax-utils
@@ -172,6 +173,9 @@ livecd/packages:
 	sys-block/partimage
 	sys-block/tw_cli
 	sys-boot/efibootmgr
+	sys-boot/mokutil
+	app-crypt/sbsigntools
+	sys-libs/efivar
 	sys-boot/grub
 	sys-firmware/b43-firmware
 	sys-firmware/ipw2100-firmware
@@ -183,8 +187,10 @@ livecd/packages:
 	sys-fs/dislocker
 	sys-fs/dmraid
 	sys-fs/dosfstools
+	sys-fs/mtools
+	sys-fs/squashfs-tools
 	sys-fs/e2fsprogs
-	sys-fs/exfat-utils
+	sys-fs/exfatprogs
 	sys-fs/extundelete
 	sys-fs/f2fs-tools
 	sys-fs/genfstab

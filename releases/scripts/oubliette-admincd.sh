@@ -24,7 +24,8 @@ if [ -f /etc/wpa_supplicant/wpa_supplicant.conf ]; then
 
 	# -M waits for a matching interface; iwlwifi registers wlan only after its
 	# async firmware load, which can land after wpa_supplicant starts
-	echo 'wpa_supplicant_args="-M -iwl*"' >> /etc/conf.d/wpa_supplicant
+	grep -q '^wpa_supplicant_args="-M' /etc/conf.d/wpa_supplicant ||
+		echo 'wpa_supplicant_args="-M -iwl*"' >> /etc/conf.d/wpa_supplicant
 	rc-update add wpa_supplicant default
 
 	# autoconfig starts dhcpcd only if a NIC exists when it runs, which a

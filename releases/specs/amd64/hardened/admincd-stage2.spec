@@ -7,7 +7,7 @@ snapshot_treeish: @TREEISH@
 source_subpath: 23.0-hardened/livecd-stage1-amd64-oubliette-@TIMESTAMP@
 portage_confdir: @REPO_DIR@/releases/portage/isos
 
-livecd/bootargs: dokeymap iommu=soft overlayfs
+livecd/bootargs: dokeymap overlayfs
 livecd/cdtar: /usr/share/catalyst/livecd/cdtar/grub-theme-gentoo_frosted.tar.bz2
 livecd/fsscript: @REPO_DIR@/releases/scripts/oubliette-admincd.sh
 livecd/fstype: squashfs
