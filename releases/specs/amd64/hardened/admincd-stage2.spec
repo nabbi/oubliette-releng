@@ -7,7 +7,9 @@ snapshot_treeish: @TREEISH@
 source_subpath: 23.0-hardened/livecd-stage1-amd64-oubliette-@TIMESTAMP@
 portage_confdir: @REPO_DIR@/releases/portage/isos
 
-livecd/bootargs: dokeymap overlayfs
+# consoleblank: blank idle VTs after 5 min. On Intel iGPUs (i915/xe) this
+# powers the panel off; on simpledrm it only blacks the framebuffer.
+livecd/bootargs: dokeymap overlayfs consoleblank=300
 livecd/cdtar: /usr/share/catalyst/livecd/cdtar/grub-theme-gentoo_frosted.tar.bz2
 livecd/fsscript: @REPO_DIR@/releases/scripts/oubliette-admincd.sh
 livecd/fstype: squashfs

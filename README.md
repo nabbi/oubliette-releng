@@ -9,7 +9,7 @@ These are my unofficial Catalyst build specs, modified from [Gentoo's Releng](ht
 * livecd: auto-join wifi when `overlay/admincd/etc/wpa_supplicant/wpa_supplicant.conf` exists locally (gitignored, never committed); start from `wpa_supplicant.example.conf` next to it
 * livecd: boots with overlayfs over the squashfs, no copy of /etc, /var, ... to tmpfs
 * livecd: includes more packages - mostly network focused
-* linux-firmware: pruned via savedconfig (no GPU, DVB or Qualcomm SoC `qcom/` blobs) to save space; the same list feeds the untested arm64 stage4, so Qualcomm arm64 boards get no `qcom/` firmware
+* linux-firmware: pruned via savedconfig (no AMD/NVIDIA GPU, DVB or Qualcomm SoC `qcom/` blobs; Intel `i915/` and `xe/` are kept for the admincd's Intel GPU drivers) to save space; the same list feeds the untested arm64 stage4, so Qualcomm arm64 boards get no `qcom/` firmware
 * distcc support
 * incorporates Oubliette [overlay](https://github.com/nabbi/oubliette-overlay) and [patches](https://github.com/nabbi/oubliette-patches)
 

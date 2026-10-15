@@ -12,6 +12,10 @@
 # which is not tested here: Qualcomm arm64 boards built from it get no qcom/
 # firmware. Drop the qcom/ rule (or give arm64 its own confdir) if that matters.
 # Qualcomm Wi-Fi/BT on x86 lives in ath10k/ ath11k/ ath12k/ qca/ and is kept.
+#
+# Intel GPU firmware (i915/ and xe/, ~33 MiB) is kept: the admincd kernel
+# autoloads i915/xe for backlight control, and xe evicts the firmware
+# framebuffer before failing on missing GuC, which blanks the console.
 
 # Example usage:
 #   ./prune_firmwares.sh /etc/portage/savedconfig/sys-kernel/linux-firmware-20230515
@@ -42,7 +46,6 @@ sed 	-e's/^a300/#a300/' \
 	-e 's/^f2255/#f2255/' \
 	-e 's/^go7007/#go7007/' \
 	-e 's/^hfi1/#hfi1/' \
-	-e 's/^i915/#i915/' \
 	-e 's%^intel/vsc%#intel/vsc%' \
 	-e 's%^intel/ipu%#intel/ipu%' \
 	-e 's/^isdbt/#isdbt/' \
@@ -67,5 +70,4 @@ sed 	-e's/^a300/#a300/' \
 	-e 's/^usbdux/#usbdux/' \
 	-e 's/^v4l-/#v4l-/' \
 	-e 's%^qcom/%#qcom/%' \
-	-e 's%^xe/%#xe/%' \
 	${1} | "${LINKS}" --respect-pruned >> linux-firmware
