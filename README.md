@@ -71,3 +71,12 @@ than 72 hours are discarded and rebuilt from scratch.
 sudo ./tools/oubliette-build.sh --full          # force a clean rebuild
 sudo ./tools/oubliette-build.sh --max-age 24    # only resume runs < 24h old
 ```
+
+Follow a running build from another terminal:
+
+```shell
+sudo ./tools/oubliette-watch.sh            # progress notes: steps, emerge (n of m), errors
+sudo ./tools/oubliette-watch.sh --status   # one-shot built/building/failed/pending summary
+sudo ./tools/oubliette-watch.sh --raw      # full log of the current spec
+sudo ./tools/oubliette-watch.sh --pkg      # build.log of the package compiling in the chroot
+```
