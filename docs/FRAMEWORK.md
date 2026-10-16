@@ -72,12 +72,11 @@ Framework lists **6.19 as the minimum kernel, 7.0+ recommended**
 `package.accept_keywords/framework` keywords `=sys-kernel/gentoo-kernel-7.2*` (and the
 matching `virtual/dist-kernel`).
 
-The kernel is a dist-kernel, as in upstream releng: `boot/kernel/gentoo/distkernel: yes`.
-Catalyst emerges `sys-kernel/gentoo-kernel`, which builds Gentoo's distribution config plus
-`hardened-base.config` (`USE=hardened` from the profile). Catalyst copies
-`releases/kconfig/amd64/fragments/framework.config` into `/etc/kernel/config.d/`, and the
-`kernel-build` eclass merges it last. On the laptop that file stays in place, so every
-`emerge -u gentoo-kernel` rebuilds with it. There is no full `.config` to maintain any more.
+The image ships **no kernel**; the spec has no `boot/kernel`. The laptop builds the
+dist-kernel `sys-kernel/gentoo-kernel` itself: Gentoo's distribution config plus
+`hardened-base.config` (`USE=hardened` from the profile). The root_overlay installs
+`overlay/framework/etc/kernel/config.d/framework.config`, and the `kernel-build` eclass merges
+it last, so the first build and every `emerge -u gentoo-kernel` after it use it. There is no full `.config` to maintain any more.
 After a kernel bump, check that no fragment symbol is dropped (recipe in
 `releases/kconfig/amd64/README.md`). Against gentoo-kernel-7.2.8 all 107 survive. The fragment covers:
 
@@ -122,23 +121,22 @@ is set on the laptop.
 
 `sys-kernel/installkernel` with `USE=dracut` (`package.use/boot`) runs dracut whenever a kernel
 is installed. Upstream's diskimage confdir adds `grub`; the image leaves the layout flag to the
-host. Catalyst builds a generic
-`--no-hostonly` initramfs with the `crypt`, `dm` and `lvm` modules (`dracut_args` in the spec),
-and `sys-fs/cryptsetup`, `sys-fs/lvm2` (`USE=lvm`) and `lvm|boot` are in the image for a
-LUKS2 -> LVM root. genkernel is no longer used (it is unmaintained upstream).
+host. There is no initramfs in the image either; dracut generates it when the laptop installs
+its kernel. `sys-fs/cryptsetup`, `sys-fs/lvm2` (`USE=lvm`) and `lvm|boot` are in the image for
+a LUKS2 -> LVM root.
 
 Deploying to the laptop (LUKS UUID, `kernel_cmdline`, signed UKI with sbctl and systemd-boot) is
-host-specific and documented on the wiki page `Gentoo_laptop_install`. After writing
-`/etc/dracut.conf.d/`, regenerate with `emerge --config sys-kernel/gentoo-kernel`.
+host-specific and documented on the wiki page `Gentoo_laptop_install`. Write
+`/etc/dracut.conf.d/` and the installkernel layout USE flags before the first kernel build;
+after changing them later, regenerate with `emerge --config sys-kernel/gentoo-kernel`.
 
 The image does **not** set `USE=dist-kernel` globally. With it, linux-firmware and
 intel-microcode depend on `virtual/dist-kernel`, so catalyst would build gentoo-kernel during
-`build_packages`, before `build_kernel` copies the fragment into `/etc/kernel/config.d/`, and the
-fragment would never be applied. Set it in `make.conf` on the laptop after install (then
-`emerge -uDN @world`), so firmware and microcode updates regenerate the initramfs.
+`build_packages`. Set it in `make.conf` on the laptop after install, so firmware and
+microcode updates regenerate the initramfs.
 
-catalyst's `kmerge.sh` deselects the kernel package after building it; the fsscript adds
-`sys-kernel/gentoo-kernel` back to `@world` so depclean keeps it.
+The fsscript adds `sys-kernel/gentoo-kernel` to `@world`, so the laptop's first
+`emerge -uDN @world` builds and installs the kernel.
 
 ## Fingerprint reader
 
