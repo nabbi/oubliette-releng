@@ -1,4 +1,7 @@
-# initramfs: generate /boot/intel-uc.img for early microcode loading
+# initramfs: installs /usr/lib/dracut/dracut.conf.d/15-intel-microcode.conf
+#   (early_microcode=yes) so dracut prepends the microcode to the initramfs.
+#   Without USE=dist-kernel it also writes /boot/intel-uc.img, which dracut and
+#   UKI setups don't need; enabling dist-kernel on the laptop drops it.
 # split-ucode: install per-cpu .bin files under /lib/firmware/intel-ucode/
 # hostonly: off — we build for distribution, not a single host
 sys-firmware/intel-microcode initramfs split-ucode -hostonly

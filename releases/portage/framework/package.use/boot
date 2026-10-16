@@ -1,0 +1,7 @@
+# installkernel: run dracut on every kernel install. No layout flag in the
+# image: the catalyst chroot has no ESP or grub.cfg to update, and the layout
+# is per host. The laptop sets "dracut uki systemd-boot" for a signed UKI
+# (wiki: Gentoo_laptop_install); upstream's diskimage uses "dracut grub".
+sys-kernel/installkernel dracut
+# lvm: lvm2 tools (not just device-mapper) for the LUKS2 -> LVM root
+sys-fs/lvm2 lvm

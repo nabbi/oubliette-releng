@@ -11,4 +11,9 @@ chown root:root /etc/nftables.rules
 chmod 0600 /etc/wpa_supplicant/wpa_supplicant.conf
 chmod 0600 /etc/nftables.rules
 
+# catalyst's kmerge.sh deselects the kernel package after building it; put
+# gentoo-kernel back in @world so depclean on the laptop keeps it
+grep -qx 'sys-kernel/gentoo-kernel' /var/lib/portage/world \
+	|| echo 'sys-kernel/gentoo-kernel' >> /var/lib/portage/world
+
 exit 0
