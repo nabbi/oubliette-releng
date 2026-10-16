@@ -14,7 +14,7 @@ x11-wm/fluxbox **
 app-portage/genup **
 
 # gentoo-kernel 7.2: Framework 13 Pro (Panther Lake) needs >= 6.19, 7.0+
-# recommended; stable is 6.18. Fragment: releases/kconfig/amd64/fragments/framework.config
+# recommended; stable is 6.18. Fragment: overlay/framework/etc/kernel/config.d/framework.config
 =sys-kernel/gentoo-kernel-7.2* ~amd64
 =virtual/dist-kernel-7.2* ~amd64
 

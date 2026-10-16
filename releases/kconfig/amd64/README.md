@@ -13,7 +13,7 @@ sed -i 's/^#\ CONFIG_MLX4_CORE_GEN2\ is\ not\ set/CONFIG_MLX4_CORE_GEN2=m/' *.co
 | Config | Spec | Built from |
 |--------|------|------------|
 | `amd64-7.2.8-admincd.config` | `admincd-stage2.spec` | previous admincd config (from the `amd64-6.6.30.config` cloud baseline) + `fragments/admincd.config` |
-| `fragments/framework.config` | `stage4-openrc-23-framework.spec` | dist-kernel fragment: catalyst copies it to `/etc/kernel/config.d/`, gentoo-kernel merges it onto the Gentoo dist config + hardened-base |
+| `overlay/framework/etc/kernel/config.d/framework.config` | `stage4-openrc-23-framework.spec` | dist-kernel fragment shipped by the root_overlay; gentoo-kernel on the laptop merges it onto the Gentoo dist config + hardened-base |
 
 `fragments/admincd.config` is generic hardware compatibility only (GOP console via
 simpledrm, Intel i915/xe for backlight control, IOMMU interrupt remapping, newer Intel

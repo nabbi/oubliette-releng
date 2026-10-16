@@ -215,19 +215,11 @@ stage4/rcadd:
 stage4/root_overlay: @REPO_DIR@/overlay/framework/
 stage4/fsscript: @REPO_DIR@/releases/scripts/oubliette-framework.sh
 
-boot/kernel: gentoo
-# Framework 13 Pro (Panther Lake / Core Ultra Series 3) kernel.
-# dist-kernel like upstream releng: gentoo-kernel (USE=hardened from the
-# profile) is built with Gentoo's distribution config, and catalyst copies
-# the config below into /etc/kernel/config.d/ so it is merged on top.
-# gentoo-kernel 7.2 is keyworded in portage/framework (vendor minimum 6.19).
-# No global USE=dist-kernel here: it makes linux-firmware/intel-microcode
-# pull virtual/dist-kernel during build_packages, which would build the
-# kernel before catalyst copies the fragment. Enable it on the laptop.
-boot/kernel/gentoo/distkernel: yes
-boot/kernel/gentoo/config: @REPO_DIR@/releases/kconfig/amd64/fragments/framework.config
-# generic initramfs for the image; hostonly one is generated on the laptop
-boot/kernel/gentoo/dracut_args: --xz --no-hostonly -a crypt -a dm -a lvm -o i18n -o usrmount -o lunmask -o nvdimm -o multipath
+# No kernel in the image: the laptop builds sys-kernel/gentoo-kernel (in
+# @world via the fsscript) with the fragment the root_overlay puts in
+# /etc/kernel/config.d/. No global USE=dist-kernel here: it makes
+# linux-firmware/intel-microcode pull virtual/dist-kernel and build the
+# kernel in build_packages. Enable it on the laptop.
 
 stage4/empty:
 	/root/.ccache
