@@ -13,9 +13,10 @@ games-roguelike/evilhack **
 x11-wm/fluxbox **
 app-portage/genup **
 
-# gentoo-sources 7.2: Framework 13 Pro (Panther Lake) needs >= 6.19, 7.0+
-# recommended; stable is 6.18. Matches releases/kconfig/amd64/amd64-7.2.8-framework.config.
-=sys-kernel/gentoo-sources-7.2* ~amd64
+# gentoo-kernel 7.2: Framework 13 Pro (Panther Lake) needs >= 6.19, 7.0+
+# recommended; stable is 6.18. Fragment: releases/kconfig/amd64/fragments/framework.config
+=sys-kernel/gentoo-kernel-7.2* ~amd64
+=virtual/dist-kernel-7.2* ~amd64
 
 # igt-gpu-tools: intel_gpu_top for the Xe3 iGPU, ~amd64 only
 x11-apps/igt-gpu-tools ~amd64

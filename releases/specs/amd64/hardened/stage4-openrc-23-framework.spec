@@ -42,6 +42,16 @@ stage4/packages:
 	# this on this profile.
 	net-wireless/wireless-regdb
 
+	## --- Boot: encrypted root (LUKS2 + LVM), initramfs via dracut ---
+	# installkernel runs dracut on every kernel install (package.use/boot);
+	# the deployed laptop switches it to a signed UKI, see the wiki
+	# Gentoo_laptop_install page
+	sys-kernel/installkernel
+	sys-kernel/dracut
+	sys-fs/cryptsetup
+	sys-fs/lvm2
+	sys-boot/efibootmgr
+
 	## --- Base system additions (mirrors server stage4) ---
 	sys-boot/grub
 	sys-apps/gptfdisk
@@ -148,8 +158,9 @@ stage4/packages:
 
 	## --- Microcode ---
 	# Intel Core Ultra Series 3 (Panther Lake) requires intel-microcode for
-	# early-boot ucode loading; initramfs USE creates /boot/intel-uc.img to
-	# prepend to the initrd so the kernel loads it before any driver init.
+	# early-boot ucode loading; initramfs USE sets early_microcode=yes for
+	# dracut (/usr/lib/dracut/dracut.conf.d/15-intel-microcode.conf) so the
+	# microcode is prepended to the initramfs before any driver init.
 	# Confirm the merged intel-microcode version includes Panther Lake CPUID
 	# microcode (20260210_p20260211 or newer covers it).
 	sys-firmware/intel-microcode
@@ -180,6 +191,8 @@ stage4/packages:
 stage4/rcadd:
 	# elogind: seats, lid/suspend handling and XDG_RUNTIME_DIR for pipewire
 	elogind|boot
+	# lvm: activate vg0 (the initramfs only activates what root needs)
+	lvm|boot
 	zram-init|boot
 	nftables|default
 	ntpd|default
@@ -203,25 +216,24 @@ stage4/root_overlay: @REPO_DIR@/overlay/framework/
 stage4/fsscript: @REPO_DIR@/releases/scripts/oubliette-framework.sh
 
 boot/kernel: gentoo
-boot/kernel/gentoo/sources: gentoo-sources
-# Framework 13 Pro (Panther Lake / Core Ultra Series 3) kernel config.
-# gentoo-sources 7.2 (keyworded in portage/framework; vendor minimum is 6.19).
-# Framework-only options: releases/kconfig/amd64/fragments/framework.config
-boot/kernel/gentoo/config: @REPO_DIR@/releases/kconfig/amd64/amd64-7.2.8-framework.config
-boot/kernel/gentoo/extraversion: framework
-boot/kernel/gentoo/gk_kernargs: --all-ramdisk-modules
-
-stage4/unmerge:
-	sys-kernel/genkernel
-	sys-kernel/gentoo-sources
+# Framework 13 Pro (Panther Lake / Core Ultra Series 3) kernel.
+# dist-kernel like upstream releng: gentoo-kernel (USE=hardened from the
+# profile) is built with Gentoo's distribution config, and catalyst copies
+# the config below into /etc/kernel/config.d/ so it is merged on top.
+# gentoo-kernel 7.2 is keyworded in portage/framework (vendor minimum 6.19).
+# No global USE=dist-kernel here: it makes linux-firmware/intel-microcode
+# pull virtual/dist-kernel during build_packages, which would build the
+# kernel before catalyst copies the fragment. Enable it on the laptop.
+boot/kernel/gentoo/distkernel: yes
+boot/kernel/gentoo/config: @REPO_DIR@/releases/kconfig/amd64/fragments/framework.config
+# generic initramfs for the image; hostonly one is generated on the laptop
+boot/kernel/gentoo/dracut_args: --xz --no-hostonly -a crypt -a dm -a lvm -o i18n -o usrmount -o lunmask -o nvdimm -o multipath
 
 stage4/empty:
 	/root/.ccache
 	/tmp
 	/usr/portage/distfiles
-	/usr/src
 	/var/cache/edb/dep
-	/var/cache/genkernel
 	/var/cache/portage/distfiles
 	/var/empty
 	/var/run
@@ -236,5 +248,4 @@ stage4/rm:
 	/root/.lesshst
 	/root/.ssh/known_hosts
 	/root/.viminfo
-	/usr/share/genkernel
 	/usr/lib64/python*/site-packages/gentoolkit/test/eclean/testdistfiles.tar.gz

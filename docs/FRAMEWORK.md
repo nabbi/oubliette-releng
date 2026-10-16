@@ -68,15 +68,18 @@ To check on the laptop which firmware the driver wants, `dmesg | grep iwlwifi` p
 ## Kernel config
 
 Framework lists **6.19 as the minimum kernel, 7.0+ recommended**
-(<https://frame.work/laptop13pro?tab=linux>). Stable `gentoo-sources` is 6.18, so
-`package.accept_keywords/framework` keywords `=sys-kernel/gentoo-sources-7.2*`. The admincd
-keywords the same series in its own confdir (`isos/package.accept_keywords/gentoo-sources`) but
-keeps its own generic config.
+(<https://frame.work/laptop13pro?tab=linux>). Stable `gentoo-kernel` is 6.18, so
+`package.accept_keywords/framework` keywords `=sys-kernel/gentoo-kernel-7.2*` (and the
+matching `virtual/dist-kernel`).
 
-The spec references `releases/kconfig/amd64/amd64-7.2.8-framework.config`: the previous
-framework config migrated to gentoo-sources-7.2.8 with `make olddefconfig`, then
-`releases/kconfig/amd64/fragments/framework.config` merged on top. See
-`releases/kconfig/amd64/README.md` for the regeneration recipe. The fragment covers:
+The kernel is a dist-kernel, as in upstream releng: `boot/kernel/gentoo/distkernel: yes`.
+Catalyst emerges `sys-kernel/gentoo-kernel`, which builds Gentoo's distribution config plus
+`hardened-base.config` (`USE=hardened` from the profile). Catalyst copies
+`releases/kconfig/amd64/fragments/framework.config` into `/etc/kernel/config.d/`, and the
+`kernel-build` eclass merges it last. On the laptop that file stays in place, so every
+`emerge -u gentoo-kernel` rebuilds with it. There is no full `.config` to maintain any more.
+After a kernel bump, check that no fragment symbol is dropped (recipe in
+`releases/kconfig/amd64/README.md`). Against gentoo-kernel-7.2.8 all 107 survive. The fragment covers:
 
 - `DRM_XE` (+ `INTEL_MEI_GSC_PROXY`/`PXP`/`HDCP`): Arc B390 Xe3 iGPU. `DRM_SIMPLEDRM` +
   `SYSFB_SIMPLEFB` keep a console on the GOP framebuffer until `xe` loads.
@@ -109,15 +112,33 @@ fingerprint reader) and fold the result back into the fragment.
 
 ## intel-microcode
 
-`sys-firmware/intel-microcode` is installed with `initramfs split-ucode -hostonly`.
+`sys-firmware/intel-microcode` is installed with `initramfs split-ucode -hostonly`. The
+`initramfs` flag installs `/usr/lib/dracut/dracut.conf.d/15-intel-microcode.conf`
+(`early_microcode=yes`), so dracut prepends the microcode to the initramfs (or UKI). The
+`/boot/intel-uc.img` it also writes is unused with dracut; it goes away once `USE=dist-kernel`
+is set on the laptop.
 
-The `initramfs` USE flag generates `/boot/intel-uc.img` for early microcode loading. The
-bootloader must load it as the first initrd, before the main initramfs:
+## initramfs and boot
 
-```
-# GRUB example
-initrd /boot/intel-uc.img /boot/initramfs-framework-*.img
-```
+`sys-kernel/installkernel` with `USE=dracut` (`package.use/boot`) runs dracut whenever a kernel
+is installed. Upstream's diskimage confdir adds `grub`; the image leaves the layout flag to the
+host. Catalyst builds a generic
+`--no-hostonly` initramfs with the `crypt`, `dm` and `lvm` modules (`dracut_args` in the spec),
+and `sys-fs/cryptsetup`, `sys-fs/lvm2` (`USE=lvm`) and `lvm|boot` are in the image for a
+LUKS2 -> LVM root. genkernel is no longer used (it is unmaintained upstream).
+
+Deploying to the laptop (LUKS UUID, `kernel_cmdline`, signed UKI with sbctl and systemd-boot) is
+host-specific and documented on the wiki page `Gentoo_laptop_install`. After writing
+`/etc/dracut.conf.d/`, regenerate with `emerge --config sys-kernel/gentoo-kernel`.
+
+The image does **not** set `USE=dist-kernel` globally. With it, linux-firmware and
+intel-microcode depend on `virtual/dist-kernel`, so catalyst would build gentoo-kernel during
+`build_packages`, before `build_kernel` copies the fragment into `/etc/kernel/config.d/`, and the
+fragment would never be applied. Set it in `make.conf` on the laptop after install (then
+`emerge -uDN @world`), so firmware and microcode updates regenerate the initramfs.
+
+catalyst's `kmerge.sh` deselects the kernel package after building it; the fsscript adds
+`sys-kernel/gentoo-kernel` back to `@world` so depclean keeps it.
 
 ## Fingerprint reader
 

@@ -13,7 +13,7 @@ sed -i 's/^#\ CONFIG_MLX4_CORE_GEN2\ is\ not\ set/CONFIG_MLX4_CORE_GEN2=m/' *.co
 | Config | Spec | Built from |
 |--------|------|------------|
 | `amd64-7.2.8-admincd.config` | `admincd-stage2.spec` | previous admincd config (from the `amd64-6.6.30.config` cloud baseline) + `fragments/admincd.config` |
-| `amd64-7.2.8-framework.config` | `stage4-openrc-23-framework.spec` | previous framework config + `fragments/framework.config` |
+| `fragments/framework.config` | `stage4-openrc-23-framework.spec` | dist-kernel fragment: catalyst copies it to `/etc/kernel/config.d/`, gentoo-kernel merges it onto the Gentoo dist config + hardened-base |
 
 `fragments/admincd.config` is generic hardware compatibility only (GOP console via
 simpledrm, Intel i915/xe for backlight control, IOMMU interrupt remapping, newer Intel
@@ -32,4 +32,18 @@ scripts/kconfig/merge_config.sh -m .config <repo>/releases/kconfig/amd64/fragmen
 make olddefconfig
 # every fragment symbol must survive; a mismatch means a missing dependency
 grep '^CONFIG_' <fragment> | while read -r l; do grep -qx "$l" .config || echo "dropped: $l"; done
+```
+
+### dist-kernel fragments
+
+Check a fragment against a gentoo-kernel version without catalyst (as a user):
+
+```shell
+DISTDIR=~/kbuild/distfiles PORTAGE_TMPDIR=~/kbuild/tmp USE=hardened \
+  ebuild /var/db/repos/gentoo/sys-kernel/gentoo-kernel/gentoo-kernel-<ver>.ebuild clean configure
+W=~/kbuild/tmp/portage/sys-kernel/gentoo-kernel-<ver>/work
+mkdir -p ~/kbuild/check && cp $W/build/.config ~/kbuild/check/.config
+cd $W/linux-* && scripts/kconfig/merge_config.sh -m -O ~/kbuild/check ~/kbuild/check/.config <fragment>
+make O=~/kbuild/check olddefconfig
+grep '^CONFIG_' <fragment> | while read -r l; do grep -qx "$l" ~/kbuild/check/.config || echo "dropped: $l"; done
 ```
