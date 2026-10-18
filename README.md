@@ -7,6 +7,9 @@ These are my unofficial Catalyst build specs, modified from [Gentoo's Releng](ht
 * kconfig: resolves usb keyboard initialization issue on one of my systems
 * livecd: auto-start sshd with key auth from `overlay/admincd/root/.ssh/authorized_keys` when it exists locally (gitignored); start from `authorized_keys.example` next to it
 * livecd: auto-join wifi when `overlay/admincd/etc/wpa_supplicant/wpa_supplicant.conf` exists locally (gitignored, never committed); start from `wpa_supplicant.example.conf` next to it
+* livecd and framework stage4: trust local CAs from `overlay/<image>/usr/local/share/ca-certificates/*.crt` when they exist locally (gitignored); see `local-ca.crt.example` next to them
+* livecd: chronyd at boot, so stage signatures and TLS see a sane clock
+* livecd: mosh for flaky (wifi) admin sessions
 * livecd: boots with overlayfs over the squashfs, no copy of /etc, /var, ... to tmpfs
 * livecd: includes more packages - mostly network focused
 * linux-firmware: pruned via savedconfig (no AMD/NVIDIA GPU, DVB or Qualcomm SoC `qcom/` blobs; Intel `i915/` and `xe/` are kept for the admincd's Intel GPU drivers) to save space; the same list feeds the untested arm64 stage4, so Qualcomm arm64 boards get no `qcom/` firmware

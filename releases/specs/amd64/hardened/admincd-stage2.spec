@@ -168,6 +168,7 @@ livecd/rm:
 	/usr/share/misc/*.old
 
 livecd/rcadd:
+    chronyd|default
     sshd|default
 
 livecd/root_overlay: @REPO_DIR@/overlay/admincd/

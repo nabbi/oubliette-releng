@@ -1,0 +1,7 @@
+# Drop PEM CA certificates here as *.crt (gitignored) to have the framework trust
+# them; the fsscript runs update-ca-certificates when any are present.
+# One certificate per file; update-ca-certificates ignores this .example.
+#
+# -----BEGIN CERTIFICATE-----
+# ...
+# -----END CERTIFICATE-----

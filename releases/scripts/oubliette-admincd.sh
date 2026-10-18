@@ -38,4 +38,14 @@ if [ -f /etc/wpa_supplicant/wpa_supplicant.conf ]; then
 	rc-update add local default
 fi
 
+# ca: overlay/admincd/usr/local/share/ca-certificates/*.crt are gitignored and
+# only ship when present in the local overlay; the .example keeps the dir, so
+# the dirs above it always arrive with the checkout's uid:gid
+chown root:root /usr /usr/local /usr/local/share
+chown -R root:root /usr/local/share/ca-certificates
+if compgen -G '/usr/local/share/ca-certificates/*.crt' >/dev/null; then
+	chmod 0644 /usr/local/share/ca-certificates/*.crt
+	update-ca-certificates
+fi
+
 exit 0

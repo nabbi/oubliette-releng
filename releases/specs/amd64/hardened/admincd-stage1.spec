@@ -104,6 +104,7 @@ livecd/packages:
 	net-misc/chrony
 	net-misc/dhcpcd
 	net-misc/iputils
+	net-misc/mosh
 	net-misc/ndisc6
 	net-misc/openssh
 	net-misc/rdate
