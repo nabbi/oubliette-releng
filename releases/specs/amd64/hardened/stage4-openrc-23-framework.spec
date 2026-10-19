@@ -54,6 +54,9 @@ stage4/packages:
 	sys-fs/cryptsetup
 	sys-fs/lvm2
 	sys-boot/efibootmgr
+	# dosfstools: fsck.vfat for the vfat ESP at /efi, checked at boot (fstab
+	# pass 2), and mkfs.vfat
+	sys-fs/dosfstools
 
 	## --- Base system additions (mirrors server stage4) ---
 	sys-boot/grub
@@ -89,6 +92,11 @@ stage4/packages:
 	net-firewall/nftables
 	sys-block/zram-init
 	dev-debug/strace
+	# shell completion, roaming ssh, compiler cache, NFS client
+	app-shells/bash-completion
+	net-misc/mosh
+	dev-util/ccache
+	net-fs/nfs-utils
 
 	## --- X.org server (minimal driver set) ---
 	# xorg-server pulls libinput, dri, glamoregl; keep drivers lean.
