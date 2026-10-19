@@ -3,15 +3,32 @@
 Custom hardened stage4 for the Framework 13 Pro (Intel Core Ultra Series 3 / Panther Lake,
 e.g. Core Ultra X7 358H, with Arc B390 Xe3 graphics).
 
-Built on top of the hardened OpenRC stage3 and supplemented by
+Built on top of the hardened OpenRC **split-usr** stage3 and supplemented by
 [gentoo_initial_setup](https://github.com/nabbi/gentoo_initial_setup) tuned for this hardware.
 
 ## Spec
 
 `releases/specs/amd64/hardened/stage4-openrc-23-framework.spec`
 
-Added to `SET_hardened_openrc_23_OPTIONAL_SPECS` in `tools/catalyst-auto-amd64.conf` — build it
+Added to `SET_hardened_openrc_23_splitusr_OPTIONAL_SPECS` in `tools/catalyst-auto-amd64.conf` — build it
 by passing the optional set flag to the build script.
+
+## split-usr
+
+The stage4 uses `default/linux/amd64/23.0/split-usr/hardened`, to match split-usr hosts
+it shares a binary package pool with. A package built on a merged-usr
+host can hardcode `/usr/bin/...` paths that don't exist on split-usr hosts, so one binpkg
+pool needs one layout.
+
+The layout is fixed when stage1 builds its root, so the stage4 has its own chain:
+`stage1-openrc-23-splitusr.spec` → `stage3-openrc-23-splitusr.spec` → this spec, all with
+`rel_type: 23.0-hardened-splitusr`. That keeps builds (`builds/23.0-hardened-splitusr/`)
+and the catalyst package cache (`packages/23.0-hardened-splitusr/`) apart from the
+merged-usr `23.0-hardened` chain (server stage4, admincd). The stage1 seed is upstream's
+`stage3-amd64-openrc-splitusr` (`tools/download-stage3-seed.sh`); there is no hardened
+split-usr autobuild, and stage1 rebuilds everything under the hardened profile anyway.
+
+Build artifacts are named `stage4-amd64-hardened-oubliette-framework-splitusr-<timestamp>`.
 
 ## X.org / GPU
 

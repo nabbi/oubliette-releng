@@ -1,11 +1,14 @@
 subarch: amd64
 target: stage4
-version_stamp: hardened-oubliette-framework-@TIMESTAMP@
-rel_type: 23.0-hardened
-profile: default/linux/amd64/23.0/hardened
+version_stamp: hardened-oubliette-framework-splitusr-@TIMESTAMP@
+# split-usr, like the hosts whose binary package pool it shares;
+# its own rel_type keeps builds and the catalyst pkgcache apart from the
+# merged-usr 23.0-hardened chain
+rel_type: 23.0-hardened-splitusr
+profile: default/linux/amd64/23.0/split-usr/hardened
 compression_mode: pixz
 snapshot_treeish: @TREEISH@
-source_subpath: 23.0-hardened/stage3-amd64-oubliette-hardened-openrc-@TIMESTAMP@
+source_subpath: 23.0-hardened-splitusr/stage3-amd64-oubliette-hardened-openrc-splitusr-@TIMESTAMP@
 portage_confdir: @REPO_DIR@/releases/portage/framework
 repos: /var/db/repos/oubliette
 
