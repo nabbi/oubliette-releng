@@ -24,7 +24,8 @@ The layout is fixed when stage1 builds its root, so the stage4 has its own chain
 `stage1-openrc-23-splitusr.spec` → `stage3-openrc-23-splitusr.spec` → this spec, all with
 `rel_type: 23.0-hardened-splitusr`. That keeps builds (`builds/23.0-hardened-splitusr/`)
 and the catalyst package cache (`packages/23.0-hardened-splitusr/`) apart from the
-merged-usr `23.0-hardened` chain (server stage4, admincd). The stage1 seed is upstream's
+merged-usr `23.0-hardened` chain, which is no longer built. The admincd is built on the
+split-usr chain too, and lands in `builds/23.0-hardened-splitusr/`. The stage1 seed is upstream's
 `stage3-amd64-openrc-splitusr` (`tools/download-stage3-seed.sh`); there is no hardened
 split-usr autobuild, and stage1 rebuilds everything under the hardened profile anyway.
 

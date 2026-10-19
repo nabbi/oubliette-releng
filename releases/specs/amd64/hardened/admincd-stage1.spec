@@ -1,10 +1,10 @@
 subarch: amd64
 version_stamp: oubliette-@TIMESTAMP@
 target: livecd-stage1
-rel_type: 23.0-hardened
-profile: default/linux/amd64/23.0/hardened
+rel_type: 23.0-hardened-splitusr
+profile: default/linux/amd64/23.0/split-usr/hardened
 snapshot_treeish: @TREEISH@
-source_subpath: 23.0-hardened/stage3-amd64-oubliette-hardened-openrc-@TIMESTAMP@
+source_subpath: 23.0-hardened-splitusr/stage3-amd64-oubliette-hardened-openrc-splitusr-@TIMESTAMP@
 compression_mode: pixz
 portage_confdir: @REPO_DIR@/releases/portage/isos
 

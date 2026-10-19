@@ -22,7 +22,7 @@ download() {
     fi
 }
 
-download amd64 hardened-openrc hardened
+#download amd64 hardened-openrc hardened   # merged-usr 23.0-hardened set, not built
 # no hardened split-usr autobuild upstream; stage1 rebuilds it under split-usr/hardened
 download amd64 openrc-splitusr hardened-splitusr hardened-openrc-splitusr
 #download amd64 musl-hardened musl-hardened
