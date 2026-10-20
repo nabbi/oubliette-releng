@@ -141,7 +141,9 @@ is set on the laptop.
 is installed. Upstream's diskimage confdir adds `grub`; the image leaves the layout flag to the
 host. There is no initramfs in the image either; dracut generates it when the laptop installs
 its kernel. `sys-fs/cryptsetup`, `sys-fs/lvm2` (`USE=lvm`) and `lvm|boot` are in the image for
-a LUKS2 -> LVM root.
+a LUKS2 -> LVM root. `app-crypt/tpm2-tools` is there too, for a LUKS key sealed in the TPM
+(Intel PTT; `TCG_CRB`/`TCG_TIS` are built in, so the initramfs has the TPM without modules)
+and unsealed with a PIN.
 
 Deploying to the laptop (LUKS UUID, `kernel_cmdline`, signed UKI with sbctl and systemd-boot) is
 host-specific and documented on the wiki page `Gentoo_laptop_install`. Write

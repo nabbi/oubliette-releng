@@ -53,6 +53,9 @@ stage4/packages:
 	sys-kernel/dracut
 	sys-fs/cryptsetup
 	sys-fs/lvm2
+	# tpm2-tools: unseal a TPM-held LUKS key (Intel PTT, TCG_CRB) from the
+	# initramfs, with a PIN as the TPM object's auth value
+	app-crypt/tpm2-tools
 	sys-boot/efibootmgr
 	# dosfstools: fsck.vfat for the vfat ESP at /efi, checked at boot (fstab
 	# pass 2), and mkfs.vfat
