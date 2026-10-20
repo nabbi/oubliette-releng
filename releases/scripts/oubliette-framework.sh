@@ -5,7 +5,7 @@ set -eu
 # checkout's uid:gid
 chown root:root /etc
 chown -R root:root /etc/skel /etc/wpa_supplicant /etc/conf.d /etc/cron.weekly \
-	/etc/kernel
+	/etc/kernel /etc/modprobe.d
 chown root:root /etc/nftables.rules
 
 # wpa_supplicant.conf collects psks (wpa_passphrase, wpa_cli save_config)

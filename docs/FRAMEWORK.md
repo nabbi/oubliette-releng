@@ -96,10 +96,12 @@ dist-kernel `sys-kernel/gentoo-kernel` itself: Gentoo's distribution config plus
 `overlay/framework/etc/kernel/config.d/framework.config`, and the `kernel-build` eclass merges
 it last, so the first build and every `emerge -u gentoo-kernel` after it use it. There is no full `.config` to maintain any more.
 After a kernel bump, check that no fragment symbol is dropped (recipe in
-`releases/kconfig/amd64/README.md`). Against gentoo-kernel-7.2.8 all 107 survive. The fragment covers:
+`releases/kconfig/amd64/README.md`). Against gentoo-kernel-7.2.11 all 108 survive and both `is not set` lines hold. The fragment covers:
 
 - `DRM_XE` (+ `INTEL_MEI_GSC_PROXY`/`PXP`/`HDCP`): Arc B390 Xe3 iGPU. `DRM_SIMPLEDRM` +
   `SYSFB_SIMPLEFB` keep a console on the GOP framebuffer until `xe` loads.
+  `DRM_PANIC_SCREEN="kmsg"`: the dist default `qr_code` needs a Rust-enabled kernel; without
+  one the kernel warns at boot and falls back to `user`.
 - `PINCTRL_INTEL_PLATFORM`: Panther Lake GPIO. Touchpad/touchscreen IRQs depend on it.
 - `INTEL_IDLE`, `INT340X_THERMAL`, `INTEL_RAPL`, `INTEL_PMC_CORE`: idle states, thermal, power.
 - `IWLMLD` + `BT_INTEL_PCIE`: BE211 Wi-Fi 7 (iwlmld op mode) and Bluetooth, which is attached
@@ -120,7 +122,16 @@ After a kernel bump, check that no fragment symbol is dropped (recipe in
 - `CROS_EC_LPC` and friends: the `cros_ec_lpc` driver matches the `FRMWC004` ACPI device
   on Framework laptops. Backs battery charge thresholds (`CHARGER_CROS_CONTROL`,
   `CROS_EC_SYSFS`), `/dev/cros_ec`, keyboard backlight, and Type-C mux/connector info used by
-  `app-laptop/framework_tool` and `power-profiles-daemon`.
+  `app-laptop/framework_tool` and `power-profiles-daemon`. `cros_charge_control` refuses to
+  bind on Framework EC firmware unless loaded with `probe_with_fwk_charge_control=1`, which
+  the root_overlay sets in `/etc/modprobe.d/framework.conf`. It then exposes
+  `/sys/class/power_supply/BAT1/charge_control_{start,end}_threshold` and `charge_behaviour`:
+  the EC's generic charge control, a second limit next to the Framework one `framework_tool`
+  sets, the lower of the two applying. The driver writes 100 on load and doesn't read the EC
+  back, so a Framework limit set with `framework_tool --charge-limit` survives reboots.
+- Off from the dist config: `INTEL_TDX_HOST` (no TDX guests on a laptop, and the platform
+  reports none) and `SENSORS_SPD5118` (DIMM temperature; fails on every resume with
+  error -6).
 
 This config was generated off-target (no Panther Lake hardware available), so it has not been
 boot-tested. Once built on real hardware, run `host/tune-kernel.sh` from
