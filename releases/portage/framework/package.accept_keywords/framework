@@ -20,3 +20,9 @@ app-portage/genup **
 
 # igt-gpu-tools: intel_gpu_top for the Xe3 iGPU, ~amd64 only
 x11-apps/igt-gpu-tools ~amd64
+
+# linux-firmware 20260810: iwlwifi-sc-a0-wh-b0-c106 (kernel 7.2's max API;
+# stable 20260622 stops at c103) and xe ptl GuC 70.72.1. Pinned: 20260910 and
+# 20260916 break the BE211 Bluetooth DDC load (Intel_Write_DDC -22), fixed in
+# 20261019. Regenerate the savedconfig with each bump.
+=sys-kernel/linux-firmware-20260810 ~amd64

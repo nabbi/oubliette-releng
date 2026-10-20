@@ -46,7 +46,7 @@ to only what the hardware requires:
 |-----------|----------------|----------|
 | Intel Xe3 iGPU | `xe/ptl_*` | Panther Lake GuC/HuC/GSC firmware (Arc B390) |
 | Intel Xe3 display | `i915/xe3lpd*_dmc.bin` | Display DMC (DC power states); `xe` loads it from `i915/` |
-| Intel WiFi | `iwlwifi-sc-*`, `iwlwifi-bz-*` | BE211 (Wi-Fi 7) loads `iwlwifi-sc-a0-wh-b0-cNNN`; kernel 7.2 accepts `-c102`..`-c106` (stable 20260622 ships up to `-c103`) |
+| Intel WiFi | `iwlwifi-sc-*`, `iwlwifi-bz-*` | BE211 (Wi-Fi 7) loads `iwlwifi-sc-a0-wh-b0-cNNN`; kernel 7.2 accepts `-c102`..`-c106`; `-c106` first ships in 20260810 (stable 20260622 stops at `-c103`), keyworded in `package.accept_keywords/framework` |
 | Realtek USB NIC | `rtl_nic/rtl815[36]*` | Ethernet Expansion Card (RTL8156B) and RTL8153 docks: r8152 PHY patches |
 | Intel Bluetooth | `intel/ibt-*` (incl. `-pci`/`-iml`) | CNVi Bluetooth (paired with BE211; PCIe via `btintel_pcie`) |
 | Intel ISH | `intel/ish/ish_ptl*` | Sensor hub firmware, loaded by the host on Panther Lake |

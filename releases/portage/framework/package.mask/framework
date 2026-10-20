@@ -1,0 +1,4 @@
+# linux-firmware: the BE211 Bluetooth DDC file fails to load
+# (Intel_Write_DDC -22); fixed in 20261019
+=sys-kernel/linux-firmware-20260910
+=sys-kernel/linux-firmware-20260916
