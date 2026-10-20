@@ -6,7 +6,7 @@ set -eu
 chown root:root /etc
 chown -R root:root /etc/skel /etc/wpa_supplicant /etc/conf.d /etc/cron.weekly \
 	/etc/kernel /etc/modprobe.d
-chown root:root /etc/nftables.rules
+chown root:root /etc/nftables.rules /etc/dhcpcd.exit-hook /etc/chrony /etc/chrony/chrony.conf
 
 # wpa_supplicant.conf collects psks (wpa_passphrase, wpa_cli save_config)
 chmod 0600 /etc/wpa_supplicant/wpa_supplicant.conf

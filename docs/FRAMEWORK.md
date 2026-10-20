@@ -200,9 +200,14 @@ always built.
 
 `stage4/rcadd` starts `elogind` (boot; seats, lid/suspend, power button, `XDG_RUNTIME_DIR`),
 `zram-init` (boot; zstd swap of a quarter of RAM), `nftables` (`/etc/nftables.rules`: inbound
-dropped except ssh, ICMP and DHCPv6), `ntpd` (openntpd), `dhcpcd` alongside `wpa_supplicant`,
-and `bluetooth` (`net-wireless/bluez`). acpid is not installed; elogind handles the lid and
-power button.
+dropped except ssh, ICMP and DHCPv6), `chronyd`, `dhcpcd` alongside `wpa_supplicant`, and
+`bluetooth` (`net-wireless/bluez`). acpid is not installed; elogind handles the lid and power
+button.
+
+`/etc/chrony/chrony.conf` uses NTS sources from four operators (two must agree; outbound
+tcp/4460 for NTS-KE) and `makestep 1 -1`, so the clock is stepped straight after a resume.
+`/etc/dhcpcd.exit-hook` runs `chronyc onoffline`: sources go offline with the default route
+and back online on the next lease.
 
 `wpa_supplicant` runs with `-M -iwl*` (`/etc/conf.d/wpa_supplicant`), so it waits for the
 iwlwifi interface that appears only after the async firmware load. Add networks with

@@ -34,7 +34,7 @@ stage4/packages:
 	app-admin/sudo
 	sys-auth/pam_yubico
 	app-editors/vim
-	net-misc/openntpd
+	net-misc/chrony
 	app-misc/screen
 	app-admin/syslog-ng
 	app-admin/logrotate

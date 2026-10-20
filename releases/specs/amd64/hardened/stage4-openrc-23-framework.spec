@@ -71,7 +71,7 @@ stage4/packages:
 	net-misc/dhcpcd
 	net-wireless/wpa_supplicant
 	net-wireless/iw
-	net-misc/openntpd
+	net-misc/chrony
 	net-misc/openssh
 	net-misc/rsync
 	net-misc/wget
@@ -209,7 +209,7 @@ stage4/rcadd:
 	lvm|boot
 	zram-init|boot
 	nftables|default
-	ntpd|default
+	chronyd|default
 	net.lo|default
 	netmount|default
 	sshd|default

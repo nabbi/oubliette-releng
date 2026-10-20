@@ -1,0 +1,3 @@
+# Sourced by dhcpcd for every event: chrony sources follow the routes, offline
+# without a default route, back online on the next lease
+chronyc onoffline >/dev/null 2>&1 || :
