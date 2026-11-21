@@ -1,0 +1,6 @@
+# Strix Halo iGPU: the kernel's amdgpu driver, Mesa's radeonsi (GL) and radv
+# (Vulkan). The arch/amd64 default also builds intel nouveau radeon vesa.
+*/* VIDEO_CARDS: -* amdgpu radeonsi
+
+# vulkan: radv, the Vulkan driver llama.cpp/ollama run on
+media-libs/mesa vulkan

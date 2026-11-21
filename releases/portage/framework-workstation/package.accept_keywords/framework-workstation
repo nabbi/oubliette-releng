@@ -1,0 +1,15 @@
+# gentoo-kernel 7.3: Framework lists 7.3 as the minimum for the Ryzen AI Max
+# PRO 400 series (https://frame.work/desktop?tab=linux); stable is 6.18.
+# Fragment: overlay/framework-workstation/etc/kernel/config.d/framework-workstation.config
+=sys-kernel/gentoo-kernel-7.3* ~amd64
+=virtual/dist-kernel-7.3* ~amd64
+
+# LLM runtime and GPU tools, ~amd64 only
+sci-ml/ollama ~amd64
+sci-ml/ggml ~amd64
+dev-util/vulkan-tools ~amd64
+dev-util/vulkan-headers ~amd64
+dev-util/vulkan-utility-libraries ~amd64
+
+# 9999 live ebuilds from the oubliette overlay
+app-portage/genup **

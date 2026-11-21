@@ -1,0 +1,6 @@
+# Headless LLM runtime: ollama on ggml's Vulkan backend (RADV on the Radeon
+# 8060S, unified memory). ROCm/HIP is left off: it compiles for hours and the
+# Vulkan path needs only mesa. Turn it on on the host if wanted
+# (docs/FRAMEWORK-WORKSTATION.md).
+sci-ml/ollama vulkan
+sci-ml/ggml vulkan

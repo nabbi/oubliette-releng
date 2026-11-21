@@ -1,0 +1,2 @@
+# uefi: UEFI capsule updates via LVFS; policykit: wheel users run fwupdmgr
+sys-apps/fwupd uefi policykit

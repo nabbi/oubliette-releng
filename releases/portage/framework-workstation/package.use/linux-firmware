@@ -1,0 +1,4 @@
+# savedconfig: install only the blobs listed in savedconfig/sys-kernel/linux-firmware
+# (Strix Halo iGPU/NPU, AMD microcode, RTL8126 5GbE, MT7925 Wi-Fi/BT)
+# initramfs: with dracut, early_microcode=yes embeds amd-ucode in the initramfs
+sys-kernel/linux-firmware savedconfig initramfs

@@ -1,0 +1,6 @@
+# /etc/conf.d/nftables
+
+# Load the hand-written ruleset; don't overwrite it on stop
+NFTABLES_SAVE="/etc/nftables.rules"
+SAVE_OPTIONS="-n"
+SAVE_ON_STOP="no"

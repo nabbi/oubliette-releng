@@ -46,7 +46,7 @@ to only what the hardware requires:
 |-----------|----------------|----------|
 | Intel Xe3 iGPU | `xe/ptl_*` | Panther Lake GuC/HuC/GSC firmware (Arc B390) |
 | Intel Xe3 display | `i915/xe3lpd*_dmc.bin` | Display DMC (DC power states); `xe` loads it from `i915/` |
-| Intel WiFi | `iwlwifi-sc-*`, `iwlwifi-bz-*` | BE211 (Wi-Fi 7) loads `iwlwifi-sc-a0-wh-b0-cNNN`; kernel 7.2 accepts `-c102`..`-c106`; `-c106` first ships in 20260810 (stable 20260622 stops at `-c103`), keyworded in `package.accept_keywords/framework` |
+| Intel WiFi | `iwlwifi-sc-*`, `iwlwifi-bz-*` | BE211 (Wi-Fi 7) loads `iwlwifi-sc-a0-wh-b0-cNNN`; kernel 7.2 accepts `-c102`..`-c106` (7.3 takes c107 too); `-c106` first ships in 20260810 (stable 20260622 stops at `-c103`), keyworded in `package.accept_keywords/framework` |
 | Realtek USB NIC | `rtl_nic/rtl815[36]*` | Ethernet Expansion Card (RTL8156B) and RTL8153 docks: r8152 PHY patches |
 | Intel Bluetooth | `intel/ibt-*` (incl. `-pci`/`-iml`) | CNVi Bluetooth (paired with BE211; PCIe via `btintel_pcie`) |
 | Intel ISH | `intel/ish/ish_ptl*` | Sensor hub firmware, loaded by the host on Panther Lake |
@@ -87,7 +87,7 @@ To check on the laptop which firmware the driver wants, `dmesg | grep iwlwifi` p
 
 Framework lists **6.19 as the minimum kernel, 7.0+ recommended**
 (<https://frame.work/laptop13pro?tab=linux>). Stable `gentoo-kernel` is 6.18, so
-`package.accept_keywords/framework` keywords `=sys-kernel/gentoo-kernel-7.2*` (and the
+`package.accept_keywords/framework` keywords `=sys-kernel/gentoo-kernel-7.3*` (and the
 matching `virtual/dist-kernel`).
 
 The image ships **no kernel**; the spec has no `boot/kernel`. The laptop builds the
@@ -96,7 +96,7 @@ dist-kernel `sys-kernel/gentoo-kernel` itself: Gentoo's distribution config plus
 `overlay/framework/etc/kernel/config.d/framework.config`, and the `kernel-build` eclass merges
 it last, so the first build and every `emerge -u gentoo-kernel` after it use it. There is no full `.config` to maintain any more.
 After a kernel bump, check that no fragment symbol is dropped (recipe in
-`releases/kconfig/amd64/README.md`). Against gentoo-kernel-7.2.11 all 108 survive and both `is not set` lines hold. The fragment covers:
+`releases/kconfig/amd64/README.md`). Against gentoo-kernel-7.3.5_p1 (checked 2026-11-21) all 108 survive and both `is not set` lines hold. The fragment covers:
 
 - `DRM_XE` (+ `INTEL_MEI_GSC_PROXY`/`PXP`/`HDCP`): Arc B390 Xe3 iGPU. `DRM_SIMPLEDRM` +
   `SYSFB_SIMPLEFB` keep a console on the GOP framebuffer until `xe` loads.

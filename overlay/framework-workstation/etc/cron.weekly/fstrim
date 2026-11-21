@@ -1,0 +1,3 @@
+#!/bin/sh
+# TRIM all mounted filesystems that support it (NVMe)
+exec /sbin/fstrim --all --quiet
