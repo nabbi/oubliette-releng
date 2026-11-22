@@ -12,7 +12,8 @@ sed -i 's/^#\ CONFIG_MLX4_CORE_GEN2\ is\ not\ set/CONFIG_MLX4_CORE_GEN2=m/' *.co
 
 | Config | Spec | Built from |
 |--------|------|------------|
-| `amd64-7.3.5-admincd.config` | `admincd-stage2.spec` | previous admincd config (from the `amd64-6.6.30.config` cloud baseline) + `fragments/admincd.config` |
+| `amd64-7.2.8-admincd.config` | `admincd-stage2.spec` (gentoo-sources-7.2.15 until zfs supports 7.3) | previous admincd config (from the `amd64-6.6.30.config` cloud baseline) + `fragments/admincd.config` |
+| `amd64-7.3.5-admincd.config` | none yet; switch admincd back once sys-fs/zfs supports 7.3 | the 7.2.8 config run through `olddefconfig` on 7.3.5 |
 | `overlay/framework-workstation/etc/kernel/config.d/framework-workstation.config` | `stage4-openrc-23-framework-workstation.spec` | dist-kernel fragment (amdgpu/KFD, XDNA, RTL8126, MT7925) merged the same way |
 | `overlay/framework/etc/kernel/config.d/framework.config` | `stage4-openrc-23-framework.spec` | dist-kernel fragment shipped by the root_overlay; gentoo-kernel on the laptop merges it onto the Gentoo dist config + hardened-base |
 

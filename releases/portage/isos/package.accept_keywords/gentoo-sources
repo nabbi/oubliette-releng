@@ -1,3 +1,6 @@
 # gentoo-sources 7.3: Strix Halo workstations need >= 7.3, Panther Lake >= 6.19; stable is 6.18.
 # Matches releases/kconfig/amd64/amd64-7.3.5-admincd.config.
 =sys-kernel/gentoo-sources-7.3* ~amd64
+# admincd pins 7.2.15 (::oubliette) until sys-fs/zfs supports 7.3.
+# Matches releases/kconfig/amd64/amd64-7.2.8-admincd.config.
+=sys-kernel/gentoo-sources-7.2* ~amd64
