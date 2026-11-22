@@ -77,6 +77,6 @@ runs on mesa alone.
 ## Admin ISO
 
 The admincd boots the machine with kernel 7.2.15 (`releases/kconfig/amd64/amd64-7.2.8-admincd.config`;
-held at 7.2 until `sys-fs/zfs` supports 7.3; the installed system runs 7.3):
+held at 7.2 until `sys-fs/zfs` supports 7.3, see `ADMINCD.md`; the installed system runs 7.3):
 GOP console, `R8169` for the 5 GbE port, `MT7925E`, `AMD_IOMMU`. amdgpu stays out of it, as its
 firmware is pruned from the ISO.
