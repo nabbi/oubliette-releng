@@ -223,5 +223,5 @@ session (no seat, no `XDG_RUNTIME_DIR`, no rootless Xorg or PipeWire).
 PipeWire runs per user rather than from rc. `overlay/framework/etc/skel/.xinitrc`
 (`stage4/root_overlay`) re-execs itself under `dbus-run-session` (`startx` skips
 `xinitrc.d`, where the session bus would otherwise start), then starts
-`gentoo-pipewire-launcher`, `xss-lock -- alock` (locks before suspend) and `startfluxbox`, so new
+`gentoo-pipewire-launcher`, `xss-lock -- alock-rs` (locks before suspend) and `startfluxbox`, so new
 users get audio and a session bus with `startx`.

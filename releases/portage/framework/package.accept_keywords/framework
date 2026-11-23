@@ -8,7 +8,7 @@ app-laptop/framework-tool-tui ~amd64
 app-misc/brightnessctl ~amd64
 
 # 9999 live ebuilds from the oubliette overlay
-x11-misc/alock **
+x11-misc/alock-rs **
 games-roguelike/evilhack **
 x11-wm/fluxbox **
 app-portage/genup **

@@ -121,7 +121,7 @@ stage4/packages:
 	x11-misc/picom
 	x11-misc/dunst
 	x11-misc/xautolock
-	x11-misc/alock
+	x11-misc/alock-rs
 	# xss-lock: lock with alock when elogind suspends on lid close
 	x11-misc/xss-lock
 	media-gfx/feh

@@ -4,9 +4,6 @@ x11-wm/fluxbox vim-syntax
 # picom: needs opengl for rendering; drm for KMS-based tear prevention
 x11-misc/picom opengl drm
 
-# alock: imlib2 backend for image-based lock screens
-x11-misc/alock imlib
-
 # mpv: egl for hardware-accelerated rendering path
 media-video/mpv egl
 

@@ -9,6 +9,6 @@ fi
 gentoo-pipewire-launcher &
 
 # lock the screen when elogind suspends (lid close) or the screensaver fires
-xss-lock -- alock &
+xss-lock -- alock-rs &
 
 exec startfluxbox
