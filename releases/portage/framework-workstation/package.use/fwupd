@@ -1,2 +1,5 @@
 # uefi: UEFI capsule updates via LVFS; policykit: wheel users run fwupdmgr
 sys-apps/fwupd uefi policykit
+
+# fwupd[uefi] draws its capsule splash with pango, which needs freetype[harfbuzz]
+media-libs/freetype harfbuzz

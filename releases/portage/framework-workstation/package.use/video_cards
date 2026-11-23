@@ -4,3 +4,7 @@
 
 # vulkan: radv, the Vulkan driver llama.cpp/ollama run on
 media-libs/mesa vulkan
+
+# Headless: mesa defaults to +X, which needs libglvnd[X] and the X11 libs.
+# radv needs neither.
+media-libs/mesa -X

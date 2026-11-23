@@ -4,12 +4,11 @@
 =sys-kernel/gentoo-kernel-7.3* ~amd64
 =virtual/dist-kernel-7.3* ~amd64
 
-# LLM runtime and GPU tools, ~amd64 only
+# LLM runtime, ~amd64 only. The Vulkan SDK packages (vulkan-headers, -loader,
+# -tools, -utility-libraries) pin each other with ~PV, so they stay on stable
+# together: keywording only some pulls two vulkan-headers into one slot.
 sci-ml/ollama ~amd64
 sci-ml/ggml ~amd64
-dev-util/vulkan-tools ~amd64
-dev-util/vulkan-headers ~amd64
-dev-util/vulkan-utility-libraries ~amd64
 
 # 9999 live ebuilds from the oubliette overlay
 app-portage/genup **
